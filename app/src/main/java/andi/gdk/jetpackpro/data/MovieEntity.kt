@@ -6,7 +6,7 @@ data class MovieEntity(
     var date: String,
     var rating: Int,
     var runtime: Int,
-    var budget: Int,
-    var revenue: Int,
+    var budget: Long,
+    var revenue: Long,
     var overview: String
 )

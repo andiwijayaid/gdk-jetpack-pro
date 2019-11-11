@@ -3,6 +3,8 @@ package andi.gdk.jetpackpro.ui.home.movie
 import andi.gdk.jetpackpro.R
 import andi.gdk.jetpackpro.data.MovieEntity
 import andi.gdk.jetpackpro.ui.home.movie.adapter.MovieAdapter
+import andi.gdk.jetpackpro.ui.home.movie.detail.MovieDetailActivity
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,7 +21,9 @@ class MovieFragment : Fragment() {
     private var movies: ArrayList<MovieEntity> = arrayListOf()
     private lateinit var movieViewModel: MovieViewModel
 
-    private val extraMovie = "EXTRA_MOVIE"
+    companion object {
+        const val EXTRA_MOVIE_TITLE = "EXTRA_MOVIE_TITLE"
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,9 +40,9 @@ class MovieFragment : Fragment() {
         movies = movieViewModel.getMovies()
 
         movieAdapter = MovieAdapter(context, movies) {
-            //            val intent = Intent(context, MovieDetailActivity::class.java)
-//            intent.putExtra(extraMovie, it)
-//            startActivity(intent)
+            val intent = Intent(context, MovieDetailActivity::class.java)
+            intent.putExtra(EXTRA_MOVIE_TITLE, it.title)
+            startActivity(intent)
         }
 
         movieRV.adapter = movieAdapter
