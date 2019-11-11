@@ -1,7 +1,7 @@
 package andi.gdk.jetpackpro.utils
 
 import andi.gdk.jetpackpro.data.MovieEntity
-import andi.gdk.jetpackpro.data.TvShow
+import andi.gdk.jetpackpro.data.TvShowEntity
 
 class DataDummy {
 
@@ -134,10 +134,10 @@ class DataDummy {
 
     fun generateDummyTvShows() {
 
-        val tvShows = arrayListOf<TvShow>()
+        val tvShows = arrayListOf<TvShowEntity>()
 
         tvShows.add(
-            TvShow(
+            TvShowEntity(
                 "poster_arrow",
                 "Arrow",
                 "October 10, 2012",
@@ -149,7 +149,7 @@ class DataDummy {
             )
         )
         tvShows.add(
-            TvShow(
+            TvShowEntity(
                 "poster_doom_patrol",
                 "Doom Patrol",
                 "February 15, 2019",
@@ -161,7 +161,7 @@ class DataDummy {
             )
         )
         tvShows.add(
-            TvShow(
+            TvShowEntity(
                 "poster_dragon_ball",
                 "Dragon Ball",
                 "February 26, 1986",
@@ -173,7 +173,7 @@ class DataDummy {
             )
         )
         tvShows.add(
-            TvShow(
+            TvShowEntity(
                 "poster_fairytail",
                 "Fairy Tail",
                 "October 12, 2009",
@@ -185,7 +185,7 @@ class DataDummy {
             )
         )
         tvShows.add(
-            TvShow(
+            TvShowEntity(
                 "poster_family_guy",
                 "Family Guy",
                 "January 31, 1999",
@@ -197,7 +197,7 @@ class DataDummy {
             )
         )
         tvShows.add(
-            TvShow(
+            TvShowEntity(
                 "poster_flash",
                 "The Flash",
                 "October 7, 2014",
@@ -209,7 +209,7 @@ class DataDummy {
             )
         )
         tvShows.add(
-            TvShow(
+            TvShowEntity(
                 "poster_got",
                 "Game of Thrones",
                 "April 17, 2011",
@@ -221,7 +221,7 @@ class DataDummy {
             )
         )
         tvShows.add(
-            TvShow(
+            TvShowEntity(
                 "poster_gotham",
                 "Gotham",
                 "September 22, 2014",
@@ -233,7 +233,7 @@ class DataDummy {
             )
         )
         tvShows.add(
-            TvShow(
+            TvShowEntity(
                 "poster_grey_anatomy",
                 "Grey's Anatomy",
                 "March 27, 2005",
@@ -245,7 +245,7 @@ class DataDummy {
             )
         )
         tvShows.add(
-            TvShow(
+            TvShowEntity(
                 "poster_hanna",
                 "Hanna",
                 "March 28, 2019",

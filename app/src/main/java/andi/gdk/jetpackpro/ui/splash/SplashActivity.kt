@@ -1,4 +1,4 @@
-package andi.gdk.jetpackpro.ui
+package andi.gdk.jetpackpro.ui.splash
 
 import andi.gdk.jetpackpro.ui.home.HomeActivity
 import android.content.Intent
