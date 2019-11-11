@@ -30,10 +30,10 @@ class MovieDetailActivity : AppCompatActivity() {
         val movieTitle = extras?.getString(EXTRA_MOVIE_TITLE)
         movieDetailViewModel.setMovieTitle(movieTitle)
 
-        initUI(movieDetailViewModel.getMovie())
+        initUi(movieDetailViewModel.getMovie())
     }
 
-    private fun initUI(movie: MovieEntity) {
+    private fun initUi(movie: MovieEntity) {
         window.setFlags(
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
@@ -66,10 +66,10 @@ class MovieDetailActivity : AppCompatActivity() {
         }
 
         Glide.with(this)
-            .load(getDrawableId(applicationContext, movie.poster.toString()))
+            .load(getDrawableId(applicationContext, movie.poster))
             .into(posterIV)
         Glide.with(this)
-            .load(getDrawableId(applicationContext, movie.poster.toString()))
+            .load(getDrawableId(applicationContext, movie.poster))
             .into(posterBackgroundIV)
 
         posterBackgroundIV.animation = AnimationUtils.loadAnimation(this, R.anim.scale_animation)
