@@ -1,6 +1,7 @@
-package andi.gdk.jetpackpro.ui.home
+package andi.gdk.jetpackpro.testing
 
 import andi.gdk.jetpackpro.R
+import andi.gdk.jetpackpro.ui.home.HomeViewPagerAdapter
 import andi.gdk.jetpackpro.ui.home.movie.MovieFragment
 import andi.gdk.jetpackpro.ui.home.tvshow.TvShowFragment
 import android.os.Build
@@ -8,7 +9,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_home.*
 
-class HomeActivity : AppCompatActivity() {
+class SingleFragmentActivity : AppCompatActivity() {
 
     private lateinit var homeViewPagerAdapter: HomeViewPagerAdapter
 
