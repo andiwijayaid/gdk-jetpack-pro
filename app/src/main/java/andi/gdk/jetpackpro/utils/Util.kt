@@ -3,7 +3,6 @@ package andi.gdk.jetpackpro.utils
 import android.content.Context
 import java.text.DecimalFormat
 import java.text.NumberFormat
-import java.util.*
 
 
 fun getDrawableId(context: Context, drawableName: String?): Int? {
@@ -27,8 +26,4 @@ fun convertRatingToFloat(rating: Int?): Float {
         return rating * 5 / 100f
     }
     return 0F
-}
-
-fun isIndonesian(): Boolean {
-    return Locale.getDefault().language == "in"
 }
