@@ -1,7 +1,7 @@
 package andi.gdk.jetpackpro.ui.home.tvshow.detail
 
 import andi.gdk.jetpackpro.R
-import andi.gdk.jetpackpro.data.TvShowEntity
+import andi.gdk.jetpackpro.data.source.local.entity.TvShowEntity
 import andi.gdk.jetpackpro.ui.home.tvshow.TvShowFragment.Companion.EXTRA_TV_SHOW_TITLE
 import andi.gdk.jetpackpro.utils.convertRatingToFloat
 import andi.gdk.jetpackpro.utils.getDrawableId
@@ -26,9 +26,9 @@ class TvShowDetailActivity : AppCompatActivity() {
 
         val extras = intent.extras
         val tvShowTitle = extras?.getString(EXTRA_TV_SHOW_TITLE)
-        tvShowDetailViewModel.setTvShowTitle(tvShowTitle)
-
-        initUi(tvShowDetailViewModel.getTvShow())
+//        tvShowDetailViewModel.setTvShowTitle(tvShowTitle)
+//
+//        initUi(tvShowDetailViewModel.getTvShow())
     }
 
     private fun initUi(tvShow: TvShowEntity) {
@@ -65,6 +65,6 @@ class TvShowDetailActivity : AppCompatActivity() {
             ).show()
         }
 
-        posterBackgroundIV.animation = AnimationUtils.loadAnimation(this, R.anim.scale_animation)
+        posterBackgroundIV.animation = AnimationUtils.loadAnimation(this, R.anim.animaton_scale)
     }
 }

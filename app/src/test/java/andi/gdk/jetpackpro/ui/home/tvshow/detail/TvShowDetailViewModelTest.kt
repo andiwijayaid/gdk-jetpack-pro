@@ -1,6 +1,6 @@
 package andi.gdk.jetpackpro.ui.home.tvshow.detail
 
-import andi.gdk.jetpackpro.data.TvShowEntity
+import andi.gdk.jetpackpro.data.source.local.entity.TvShowEntity
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before

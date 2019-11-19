@@ -9,6 +9,13 @@ fun getDrawableId(context: Context, drawableName: String?): Int? {
     return context.resources.getIdentifier(drawableName, "drawable", context.packageName)
 }
 
+fun normalizeRating(rating: Float?): Float {
+    if (rating != null) {
+        return rating.div(2)
+    }
+    return 0F
+}
+
 fun convertToCurrency(money: Long?): String {
     val nf = NumberFormat.getCurrencyInstance()
     val pattern = (nf as DecimalFormat).toPattern()

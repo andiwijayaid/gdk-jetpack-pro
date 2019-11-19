@@ -1,6 +1,6 @@
 package andi.gdk.jetpackpro.ui.home.movie.detail
 
-import andi.gdk.jetpackpro.data.MovieEntity
+import andi.gdk.jetpackpro.data.source.local.entity.MovieEntity
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before

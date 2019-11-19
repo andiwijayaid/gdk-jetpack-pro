@@ -2,7 +2,7 @@ package andi.gdk.jetpackpro.ui.home.tvshow.adapter
 
 
 import andi.gdk.jetpackpro.R
-import andi.gdk.jetpackpro.data.TvShowEntity
+import andi.gdk.jetpackpro.data.source.local.entity.TvShowEntity
 import andi.gdk.jetpackpro.utils.convertRatingToFloat
 import andi.gdk.jetpackpro.utils.getDrawableId
 import android.content.Context

@@ -1,24 +1,19 @@
 package andi.gdk.jetpackpro.ui.home.tvshow.detail
 
-import andi.gdk.jetpackpro.data.TvShowEntity
-import andi.gdk.jetpackpro.utils.generateDummyTvShows
+import andi.gdk.jetpackpro.data.source.TheMovieDbRepository
+import andi.gdk.jetpackpro.data.source.local.entity.TvShowEntity
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 
-class TvShowDetailViewModel : ViewModel() {
+class TvShowDetailViewModel(private val theMovieDbRepository: TheMovieDbRepository) : ViewModel() {
 
-    private lateinit var tvShowEntity: TvShowEntity
-    private var tvShowTitle: String? = null
+    private var id = 0
 
-    fun getTvShow(): TvShowEntity {
-        for (tvShow in generateDummyTvShows()) {
-            if (tvShow.title == tvShowTitle) {
-                tvShowEntity = tvShow
-            }
-        }
-        return tvShowEntity
+    fun setId(id: Int) {
+        this.id = id
     }
 
-    fun setTvShowTitle(tvShowTitle: String?) {
-        this.tvShowTitle = tvShowTitle
-    }
+    val tvShow: LiveData<TvShowEntity>
+        get() = theMovieDbRepository.getTvShow(id)
+
 }

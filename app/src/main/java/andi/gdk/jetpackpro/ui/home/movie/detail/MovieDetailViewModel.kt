@@ -1,24 +1,19 @@
 package andi.gdk.jetpackpro.ui.home.movie.detail
 
-import andi.gdk.jetpackpro.data.MovieEntity
-import andi.gdk.jetpackpro.utils.generateDummyMovies
+import andi.gdk.jetpackpro.data.source.TheMovieDbRepository
+import andi.gdk.jetpackpro.data.source.local.entity.MovieEntity
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 
-class MovieDetailViewModel : ViewModel() {
+class MovieDetailViewModel(private val theMovieDbRepository: TheMovieDbRepository) : ViewModel() {
 
-    private lateinit var movieEntity: MovieEntity
-    private var movieTitle: String? = null
+    private var id = 0
 
-    fun getMovie(): MovieEntity {
-        for (movie in generateDummyMovies()) {
-            if (movie.title == movieTitle) {
-                movieEntity = movie
-            }
-        }
-        return movieEntity
+    fun setId(id: Int) {
+        this.id = id
     }
 
-    fun setMovieTitle(movieTitle: String?) {
-        this.movieTitle = movieTitle
-    }
+    val movie: LiveData<MovieEntity>
+        get() = theMovieDbRepository.getMovie(id)
+
 }

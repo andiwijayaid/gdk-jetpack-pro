@@ -49,4 +49,8 @@ ext {
     pagingVersion = '2.1.0'
     glideVersion = '4.10.0'
     idleResourceVersion = '3.2.0'
+    retrofitVersion = '2.6.0'
+    lottieVersion = '3.0.7'
+    smartRefreshLayoutVersion = '1.1.0-alpha-30'
+    spinKitVersion = '1.2.0'
 }

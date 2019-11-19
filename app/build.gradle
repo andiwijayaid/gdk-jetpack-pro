@@ -13,6 +13,10 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", "API_URL", "\"https://api.themoviedb.org/\""
+        buildConfigField "String", "IMAGE_URL", "\"https://image.tmdb.org/\""
+        buildConfigField "String", "TOKEN", "\"edf6ba342b359b83a59218f69953b2d8\""
     }
     buildTypes {
         release {
@@ -23,6 +27,9 @@ android {
             applicationIdSuffix ".debug"
             debuggable true
         }
+    }
+    androidExtensions {
+        experimental = true
     }
 }
 
@@ -77,4 +84,21 @@ dependencies {
 
     // Justify TextView
     implementation 'me.biubiubiu.justifytext:library:1.1'
+
+    // Retrofit
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+
+    // Dependencies for Idle Resource
+    implementation "androidx.test.espresso:espresso-idling-resource:$idleResourceVersion"
+
+    // Lottie
+    implementation "com.airbnb.android:lottie:$lottieVersion"
+
+    // Swipe Refresh Layout
+    implementation "com.scwang.smartrefresh:SmartRefreshLayout:$smartRefreshLayoutVersion"
+    implementation "com.scwang.smartrefresh:SmartRefreshHeader:$smartRefreshLayoutVersion"
+
+    // Spinner Kit - Progress Bar
+    implementation "com.github.ybq:Android-SpinKit:$spinKitVersion"
 }
