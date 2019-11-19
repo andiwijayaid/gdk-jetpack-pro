@@ -22,7 +22,8 @@ class TvShowFragment : androidx.fragment.app.Fragment() {
     private var page = 1
 
     companion object {
-        const val EXTRA_TV_SHOW_TITLE = "EXTRA_TV_SHOW_TITLE"
+        const val EXTRA_TV_SHOW_ID = "EXTRA_TV_SHOW_ID"
+        const val EXTRA_TV_SHOW = "EXTRA_TV_SHOW"
     }
 
     override fun onCreateView(

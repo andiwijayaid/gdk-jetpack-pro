@@ -9,8 +9,10 @@ class TvShowDetailViewModel(private val theMovieDbRepository: TheMovieDbReposito
 
     private var id = 0
 
-    fun setId(id: Int) {
-        this.id = id
+    fun setId(id: Int?) {
+        if (id != null) {
+            this.id = id
+        }
     }
 
     val tvShow: LiveData<TvShowResponse>

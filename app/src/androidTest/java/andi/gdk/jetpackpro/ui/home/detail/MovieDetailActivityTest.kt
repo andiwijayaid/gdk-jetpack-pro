@@ -1,9 +1,7 @@
 package andi.gdk.jetpackpro.ui.home.detail
 
 import andi.gdk.jetpackpro.R
-import andi.gdk.jetpackpro.ui.home.movie.MovieFragment.Companion.EXTRA_MOVIE_TITLE
 import andi.gdk.jetpackpro.ui.home.movie.detail.MovieDetailActivity
-import andi.gdk.jetpackpro.utils.generateFakeDummyMovies
 import android.content.Intent
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches

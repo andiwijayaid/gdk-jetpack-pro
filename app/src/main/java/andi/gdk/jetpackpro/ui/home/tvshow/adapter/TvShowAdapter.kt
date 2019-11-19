@@ -4,8 +4,12 @@ package andi.gdk.jetpackpro.ui.home.tvshow.adapter
 import andi.gdk.jetpackpro.BuildConfig
 import andi.gdk.jetpackpro.R
 import andi.gdk.jetpackpro.data.source.local.entity.TvShowEntity
+import andi.gdk.jetpackpro.ui.home.tvshow.TvShowFragment.Companion.EXTRA_TV_SHOW
+import andi.gdk.jetpackpro.ui.home.tvshow.TvShowFragment.Companion.EXTRA_TV_SHOW_ID
+import andi.gdk.jetpackpro.ui.home.tvshow.detail.TvShowDetailActivity
 import andi.gdk.jetpackpro.utils.normalizeRating
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -65,7 +69,10 @@ class TvShowViewHolder(view: View) : androidx.recyclerview.widget.RecyclerView.V
         itemView.ratingBar.rating = normalizeRating(tvShow.rating)
 
         itemView.setOnClickListener {
-
+            val intent = Intent(context, TvShowDetailActivity::class.java)
+            intent.putExtra(EXTRA_TV_SHOW_ID, tvShow.id)
+            intent.putExtra(EXTRA_TV_SHOW, tvShow)
+            context.startActivity(intent)
         }
     }
 }

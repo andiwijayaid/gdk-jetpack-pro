@@ -7,7 +7,7 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class TvShowEntity(
     @SerializedName("id")
-    var tvSeriesId: Int? = null,
+    var id: Int? = null,
     @SerializedName("poster_path")
     var poster: String? = null,
     @SerializedName("backdrop_path")
