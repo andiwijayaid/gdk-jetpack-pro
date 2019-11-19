@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.activity_tv_show_detail.*
 
 class TvShowDetailActivity : AppCompatActivity() {
 
-    private lateinit var tvShowDetailViewModel: TvShowDetailViewModel
+    private var tvShowDetailViewModel: TvShowDetailViewModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +30,7 @@ class TvShowDetailActivity : AppCompatActivity() {
         tvShowDetailViewModel = obtainViewModel(this)
         val extras = intent.extras
         val tvShowId = extras?.getInt(EXTRA_TV_SHOW_ID)
-        tvShowDetailViewModel.setId(tvShowId)
+        tvShowDetailViewModel?.setId(tvShowId)
 
         initUi()
     }
@@ -68,7 +68,7 @@ class TvShowDetailActivity : AppCompatActivity() {
 
         posterBackgroundIV.animation = AnimationUtils.loadAnimation(this, R.anim.animaton_scale)
 
-        tvShowDetailViewModel.tvShow.observe(this, Observer {
+        tvShowDetailViewModel?.tvShow?.observe(this, Observer {
             if (it != null) {
                 stopLoading()
                 numberOfSeasonTV.text = it.numberOfSeasons?.toString()
@@ -92,10 +92,10 @@ class TvShowDetailActivity : AppCompatActivity() {
         numberOfEpsPB.visibility = View.INVISIBLE
     }
 
-    private fun obtainViewModel(activity: FragmentActivity?): TvShowDetailViewModel {
+    private fun obtainViewModel(activity: FragmentActivity?): TvShowDetailViewModel? {
         val factory = ViewModelFactory.getInstance()
         return activity?.let {
             ViewModelProviders.of(it, factory).get(TvShowDetailViewModel::class.java)
-        }!!
+        }
     }
 }

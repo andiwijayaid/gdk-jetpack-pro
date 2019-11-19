@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.fragment_tv_show.*
 class TvShowFragment : androidx.fragment.app.Fragment() {
 
     private lateinit var tvShowAdapter: TvShowAdapter
-    private lateinit var tvShowViewModel: TvShowViewModel
+    private var tvShowViewModel: TvShowViewModel? = null
     private var page = 1
 
     companion object {
@@ -41,7 +41,7 @@ class TvShowFragment : androidx.fragment.app.Fragment() {
         showLoading(true)
 
         tvShowViewModel = obtainViewModel(activity)
-        tvShowViewModel.setPage(page)
+        tvShowViewModel?.setPage(page)
         setTvShows()
 
         tvShowRV.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -51,13 +51,13 @@ class TvShowFragment : androidx.fragment.app.Fragment() {
         refreshLayout.setOnRefreshLoadMoreListener(object : OnRefreshLoadMoreListener {
             override fun onLoadMore(refreshLayout: RefreshLayout) {
                 page += 1
-                tvShowViewModel.setPage(page)
+                tvShowViewModel?.setPage(page)
                 setTvShows()
             }
 
             override fun onRefresh(refreshLayout: RefreshLayout) {
                 page = 1
-                tvShowViewModel.setPage(page)
+                tvShowViewModel?.setPage(page)
                 setTvShows()
             }
         })
@@ -65,7 +65,7 @@ class TvShowFragment : androidx.fragment.app.Fragment() {
 
     private fun setTvShows() {
 
-        tvShowViewModel.tvShows.observe(this, androidx.lifecycle.Observer {
+        tvShowViewModel?.tvShows?.observe(this, androidx.lifecycle.Observer {
             showLoading(false)
 
             refreshLayout.finishRefresh(true)
@@ -89,11 +89,11 @@ class TvShowFragment : androidx.fragment.app.Fragment() {
         })
     }
 
-    private fun obtainViewModel(activity: FragmentActivity?): TvShowViewModel {
+    private fun obtainViewModel(activity: FragmentActivity?): TvShowViewModel? {
         val factory = ViewModelFactory.getInstance()
         return activity?.let {
             ViewModelProviders.of(it, factory).get(TvShowViewModel::class.java)
-        }!!
+        }
     }
 
 

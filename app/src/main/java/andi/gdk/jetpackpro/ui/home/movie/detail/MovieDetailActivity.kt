@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.main.activity_movie_detail.*
 
 class MovieDetailActivity : AppCompatActivity() {
 
-    private lateinit var movieDetailViewModel: MovieDetailViewModel
+    private var movieDetailViewModel: MovieDetailViewModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +32,7 @@ class MovieDetailActivity : AppCompatActivity() {
         movieDetailViewModel = obtainViewModel(this)
         val extras = intent.extras
         val movieId = extras?.getInt(EXTRA_MOVIE_ID)
-        movieDetailViewModel.setId(movieId)
+        movieDetailViewModel?.setId(movieId)
 
         initUi()
     }
@@ -73,7 +73,7 @@ class MovieDetailActivity : AppCompatActivity() {
 
         posterBackgroundIV.animation = AnimationUtils.loadAnimation(this, R.anim.animaton_scale)
 
-        movieDetailViewModel.movie.observe(this, Observer {
+        movieDetailViewModel?.movie?.observe(this, Observer {
             if (it != null) {
                 var mBudget = it.budget
                 var mRevenue = it.revenue
@@ -109,10 +109,10 @@ class MovieDetailActivity : AppCompatActivity() {
         numberOfSeasonPB.visibility = View.GONE
     }
 
-    private fun obtainViewModel(activity: FragmentActivity?): MovieDetailViewModel {
+    private fun obtainViewModel(activity: FragmentActivity?): MovieDetailViewModel? {
         val factory = ViewModelFactory.getInstance()
         return activity?.let {
             ViewModelProviders.of(it, factory).get(MovieDetailViewModel::class.java)
-        }!!
+        }
     }
 }

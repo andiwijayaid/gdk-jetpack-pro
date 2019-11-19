@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.fragment_movie.*
 class MovieFragment : Fragment() {
 
     private lateinit var movieAdapter: MovieAdapter
-    private lateinit var movieViewModel: MovieViewModel
+    private var movieViewModel: MovieViewModel? = null
     private var page = 1
 
     companion object {
@@ -42,7 +42,8 @@ class MovieFragment : Fragment() {
         showLoading(true)
 
         movieViewModel = obtainViewModel(activity)
-        movieViewModel.setPage(page)
+
+        movieViewModel?.setPage(page)
         setMovies()
 
         movieRV.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -52,20 +53,20 @@ class MovieFragment : Fragment() {
         refreshLayout.setOnRefreshLoadMoreListener(object : OnRefreshLoadMoreListener {
             override fun onLoadMore(refreshLayout: RefreshLayout) {
                 page += 1
-                movieViewModel.setPage(page)
+                movieViewModel?.setPage(page)
                 setMovies()
             }
 
             override fun onRefresh(refreshLayout: RefreshLayout) {
                 page = 1
-                movieViewModel.setPage(page)
+                movieViewModel?.setPage(page)
                 setMovies()
             }
         })
     }
 
     private fun setMovies() {
-        movieViewModel.movies.observe(this, androidx.lifecycle.Observer {
+        movieViewModel?.movies?.observe(this, androidx.lifecycle.Observer {
             showLoading(false)
 
             refreshLayout.finishRefresh(true)
@@ -88,11 +89,9 @@ class MovieFragment : Fragment() {
         })
     }
 
-    private fun obtainViewModel(activity: FragmentActivity?): MovieViewModel {
+    private fun obtainViewModel(activity: FragmentActivity?): MovieViewModel? {
         val factory = ViewModelFactory.getInstance()
-        return activity?.let {
-            ViewModelProviders.of(it, factory).get(MovieViewModel::class.java)
-        }!!
+        return activity?.let { ViewModelProviders.of(it, factory).get(MovieViewModel::class.java) }
     }
 
 
