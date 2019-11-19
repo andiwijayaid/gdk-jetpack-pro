@@ -156,7 +156,6 @@
             app:layout_constraintTop_toBottomOf="@+id/titleTV" />
 
         <TextView
-            android:id="@+id/ratngTV"
             android:layout_width="59dp"
             android:layout_height="19dp"
             android:layout_marginStart="8dp"
