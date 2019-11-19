@@ -7,6 +7,7 @@ import andi.gdk.jetpackpro.data.source.TvShowData
 import andi.gdk.jetpackpro.data.source.local.entity.MovieEntity
 import andi.gdk.jetpackpro.data.source.local.entity.TvShowEntity
 import andi.gdk.jetpackpro.data.source.remote.response.MoviesResponse
+import andi.gdk.jetpackpro.data.source.remote.response.TvShowsResponse
 import andi.gdk.jetpackpro.utils.EspressoIdlingResource
 import android.util.Log
 import retrofit2.Call
@@ -63,9 +64,21 @@ class RemoteRepository {
 
     fun getTvShows(loadTvShowsCallback: LoadTvShowsCallback, page: Int) {
         EspressoIdlingResource.increment()
-        val tvShowData = TvShowData()
-        loadTvShowsCallback.onTvShowsRetrieved(tvShowData.loadTvShows(page))
-        EspressoIdlingResource.decrement()
+        ApiConfig().instance().getTvShows(
+            BuildConfig.TOKEN, page
+        ).enqueue(object : retrofit2.Callback<TvShowsResponse> {
+            override fun onFailure(call: Call<TvShowsResponse>, t: Throwable) {
+                Log.d("M Fail", t.message.toString())
+            }
+
+            override fun onResponse(
+                call: Call<TvShowsResponse>,
+                response: Response<TvShowsResponse>
+            ) {
+                EspressoIdlingResource.decrement()
+                loadTvShowsCallback.onTvShowsRetrieved(response.body()?.tvShows)
+            }
+        })
     }
 
     interface LoadTvShowsCallback {
@@ -84,4 +97,5 @@ class RemoteRepository {
         fun onTvShowRetrieved(tvShowEntity: TvShowEntity?)
         fun onFail()
     }
+
 }

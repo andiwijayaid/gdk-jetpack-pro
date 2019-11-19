@@ -1,20 +1,37 @@
 package andi.gdk.jetpackpro.ui.home.tvshow.adapter
 
 
+import andi.gdk.jetpackpro.BuildConfig
 import andi.gdk.jetpackpro.R
 import andi.gdk.jetpackpro.data.source.local.entity.TvShowEntity
-import andi.gdk.jetpackpro.utils.convertRatingToFloat
-import andi.gdk.jetpackpro.utils.getDrawableId
+import andi.gdk.jetpackpro.utils.normalizeRating
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.item_tv_show.view.*
 
 
-class TvShowAdapter(private val context: Context?, private var tvShows: ArrayList<TvShowEntity>, private val listener: (TvShowEntity) -> Unit) :
+class TvShowAdapter(private val context: Context?) :
         androidx.recyclerview.widget.RecyclerView.Adapter<TvShowViewHolder>() {
+
+    private val tvShows = arrayListOf<TvShowEntity>()
+
+    fun setTvShows(tvShows: ArrayList<TvShowEntity>?) {
+        if (tvShows == null) return
+        this.tvShows.clear()
+        this.tvShows.addAll(tvShows)
+        notifyDataSetChanged()
+    }
+
+    fun addTvShows(tvShows: ArrayList<TvShowEntity>?) {
+        if (tvShows == null) return
+        this.tvShows.addAll(tvShows)
+        notifyDataSetChanged()
+    }
+
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): TvShowViewHolder {
         return TvShowViewHolder(
                 LayoutInflater.from(p0.context).inflate(
@@ -29,7 +46,7 @@ class TvShowAdapter(private val context: Context?, private var tvShows: ArrayLis
 
     override fun onBindViewHolder(p0: TvShowViewHolder, p1: Int) {
         if (context != null) {
-            p0.bindItem(context, tvShows[p1], listener)
+            p0.bindItem(context, tvShows[p1])
         }
     }
 
@@ -37,17 +54,18 @@ class TvShowAdapter(private val context: Context?, private var tvShows: ArrayLis
 
 class TvShowViewHolder(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
 
-    fun bindItem(context: Context, tvShow: TvShowEntity, listener: (TvShowEntity) -> Unit) {
+    fun bindItem(context: Context, tvShow: TvShowEntity) {
+        itemView.itemParentCV.animation =
+            AnimationUtils.loadAnimation(context, R.anim.animation_slide_from_right)
         itemView.titleTV.text = tvShow.title
-        itemView.dateTV.text = tvShow.date
-        itemView.runtimeTV.text = context.getString(R.string.run_time_format, tvShow.runtime)
+        itemView.dateTV.text = tvShow.firstAirDate
         Glide.with(context)
-                .load(getDrawableId(context, tvShow.poster))
-                .into(itemView.posterIV)
-        itemView.ratingBar.rating = convertRatingToFloat(tvShow.rating)
+            .load("${BuildConfig.IMAGE_URL}t/p/w185${tvShow.poster}")
+            .into(itemView.posterIV)
+        itemView.ratingBar.rating = normalizeRating(tvShow.rating)
 
         itemView.setOnClickListener {
-            listener(tvShow)
+
         }
     }
 }

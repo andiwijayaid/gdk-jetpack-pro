@@ -47,10 +47,10 @@ class TvShowData {
                     call: Call<TvShowResponse>,
                     response: Response<TvShowResponse>
                 ) {
-                    tvShow = TvShowEntity(
-                        numberOfEpisode = response.body()?.numberOfEpisodes,
-                        numberOfSeason = response.body()?.numberOfSeasons
-                    )
+//                    tvShow = TvShowEntity(
+//                        numberOfEpisode = response.body()?.numberOfEpisodes,
+//                        numberOfSeason = response.body()?.numberOfSeasons
+//                    )
                 }
             })
 
