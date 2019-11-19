@@ -16,16 +16,16 @@ fun normalizeRating(rating: Float?): Float {
     return 0F
 }
 
-fun convertToCurrency(money: Long?): String {
+fun convertToCurrency(money: String?): String {
     val nf = NumberFormat.getCurrencyInstance()
     val pattern = (nf as DecimalFormat).toPattern()
     val newPattern = pattern.replace("\u00A4", "").trim { it <= ' ' }
     val newFormat = DecimalFormat(newPattern)
-    return newFormat.format(money)
+    return newFormat.format(money?.toLong())
 }
 
-fun isZero(money: Long?): Boolean {
-    return money == 0L
+fun isZero(money: String?): Boolean {
+    return money == "0.00"
 }
 
 fun convertRatingToFloat(rating: Int?): Float {

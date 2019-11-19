@@ -101,4 +101,7 @@ dependencies {
 
     // Spinner Kit - Progress Bar
     implementation "com.github.ybq:Android-SpinKit:$spinKitVersion"
+
+    // Favorite BT
+    implementation "com.sackcentury:shinebutton:$shineButtonVersion"
 }

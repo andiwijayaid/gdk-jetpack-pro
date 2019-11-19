@@ -53,4 +53,5 @@ ext {
     lottieVersion = '3.0.7'
     smartRefreshLayoutVersion = '1.1.0-alpha-30'
     spinKitVersion = '1.2.0'
+    shineButtonVersion = '1.0.0'
 }

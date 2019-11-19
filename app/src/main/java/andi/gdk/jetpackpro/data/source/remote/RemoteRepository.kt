@@ -2,12 +2,12 @@ package andi.gdk.jetpackpro.data.source.remote
 
 import andi.gdk.jetpackpro.BuildConfig
 import andi.gdk.jetpackpro.api.ApiConfig
-import andi.gdk.jetpackpro.data.source.MovieData
-import andi.gdk.jetpackpro.data.source.TvShowData
 import andi.gdk.jetpackpro.data.source.local.entity.MovieEntity
 import andi.gdk.jetpackpro.data.source.local.entity.TvShowEntity
 import andi.gdk.jetpackpro.data.source.remote.response.MoviesResponse
+import andi.gdk.jetpackpro.data.source.remote.response.TvShowResponse
 import andi.gdk.jetpackpro.data.source.remote.response.TvShowsResponse
+import andi.gdk.jetpackpro.response.MovieResponse
 import andi.gdk.jetpackpro.utils.EspressoIdlingResource
 import android.util.Log
 import retrofit2.Call
@@ -52,13 +52,24 @@ class RemoteRepository {
 
     fun getMovie(loadMoviesCallback: LoadMovieCallback, id: Int) {
         EspressoIdlingResource.increment()
-        val movieData = MovieData()
-        loadMoviesCallback.onMovieRetrieved(movieData.loadMovie(id))
-        EspressoIdlingResource.decrement()
+        ApiConfig().instance().getMovie(id, BuildConfig.TOKEN)
+            .enqueue(object : retrofit2.Callback<MovieResponse> {
+                override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
+                    Log.d("M Fail", t.message.toString())
+                }
+
+                override fun onResponse(
+                    call: Call<MovieResponse>,
+                    response: Response<MovieResponse>
+                ) {
+                    EspressoIdlingResource.decrement()
+                    loadMoviesCallback.onMovieRetrieved(response.body())
+                }
+            })
     }
 
     interface LoadMovieCallback {
-        fun onMovieRetrieved(movieEntity: MovieEntity?)
+        fun onMovieRetrieved(movieEntity: MovieResponse?)
         fun onFail()
     }
 
@@ -88,13 +99,24 @@ class RemoteRepository {
 
     fun getTvShow(loadTvShowCallback: LoadTvShowCallback, id: Int) {
         EspressoIdlingResource.increment()
-        val tvShowData = TvShowData()
-        loadTvShowCallback.onTvShowRetrieved(tvShowData.loadTvShow(id))
-        EspressoIdlingResource.decrement()
+        ApiConfig().instance().getTvShow(id, BuildConfig.TOKEN)
+            .enqueue(object : retrofit2.Callback<TvShowResponse> {
+                override fun onFailure(call: Call<TvShowResponse>, t: Throwable) {
+                    Log.d("M Fail", t.message.toString())
+                }
+
+                override fun onResponse(
+                    call: Call<TvShowResponse>,
+                    response: Response<TvShowResponse>
+                ) {
+                    EspressoIdlingResource.decrement()
+                    loadTvShowCallback.onTvShowRetrieved(response.body())
+                }
+            })
     }
 
     interface LoadTvShowCallback {
-        fun onTvShowRetrieved(tvShowEntity: TvShowEntity?)
+        fun onTvShowRetrieved(tvShowEntity: TvShowResponse?)
         fun onFail()
     }
 

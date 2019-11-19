@@ -1,7 +1,7 @@
 package andi.gdk.jetpackpro.ui.home.tvshow.detail
 
 import andi.gdk.jetpackpro.data.source.TheMovieDbRepository
-import andi.gdk.jetpackpro.data.source.local.entity.TvShowEntity
+import andi.gdk.jetpackpro.data.source.remote.response.TvShowResponse
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 
@@ -13,7 +13,7 @@ class TvShowDetailViewModel(private val theMovieDbRepository: TheMovieDbReposito
         this.id = id
     }
 
-    val tvShow: LiveData<TvShowEntity>
+    val tvShow: LiveData<TvShowResponse>
         get() = theMovieDbRepository.getTvShow(id)
 
 }

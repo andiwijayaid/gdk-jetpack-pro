@@ -3,7 +3,8 @@ package andi.gdk.jetpackpro.ui.home.movie.adapter
 import andi.gdk.jetpackpro.BuildConfig
 import andi.gdk.jetpackpro.R
 import andi.gdk.jetpackpro.data.source.local.entity.MovieEntity
-import andi.gdk.jetpackpro.ui.home.movie.MovieFragment
+import andi.gdk.jetpackpro.ui.home.movie.MovieFragment.Companion.EXTRA_MOVIE
+import andi.gdk.jetpackpro.ui.home.movie.MovieFragment.Companion.EXTRA_MOVIE_ID
 import andi.gdk.jetpackpro.ui.home.movie.detail.MovieDetailActivity
 import andi.gdk.jetpackpro.utils.normalizeRating
 import android.content.Context
@@ -67,7 +68,8 @@ class MovieViewHolder(view: View) : androidx.recyclerview.widget.RecyclerView.Vi
 
         itemView.setOnClickListener {
             val intent = Intent(context, MovieDetailActivity::class.java)
-            intent.putExtra(MovieFragment.EXTRA_MOVIE_TITLE, movie.title)
+            intent.putExtra(EXTRA_MOVIE_ID, movie.id)
+            intent.putExtra(EXTRA_MOVIE, movie)
             context.startActivity(intent)
         }
     }
