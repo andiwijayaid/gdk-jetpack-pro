@@ -48,9 +48,9 @@ class TvShowDetailActivity : AppCompatActivity() {
         toolbar.setNavigationOnClickListener { finish() }
 
         val tvShow = intent.getParcelableExtra<TvShowEntity>(EXTRA_TV_SHOW)
-        titleTV.text = tvShow?.title
+        titleTV.text = tvShow?.originalName
         dateTV.text = tvShow?.firstAirDate
-        ratingBar.rating = normalizeRating(tvShow?.rating)
+        ratingBar.rating = normalizeRating(tvShow?.voteAverage)
         if (tvShow?.overview != "") {
             overviewTV.text =
                 String.format(resources.getString(R.string.overview_format), tvShow?.overview)
@@ -60,10 +60,10 @@ class TvShowDetailActivity : AppCompatActivity() {
         numberOfEpsTV.visibility = View.INVISIBLE
 
         Glide.with(this)
-            .load("${BuildConfig.IMAGE_URL}t/p/original${tvShow?.poster}")
+            .load("${BuildConfig.IMAGE_URL}t/p/original${tvShow?.posterPath}")
             .into(posterIV)
         Glide.with(this)
-            .load("${BuildConfig.IMAGE_URL}t/p/original${tvShow?.backdrop}")
+            .load("${BuildConfig.IMAGE_URL}t/p/original${tvShow?.backdropPath}")
             .into(posterBackgroundIV)
 
         posterBackgroundIV.animation = AnimationUtils.loadAnimation(this, R.anim.animaton_scale)

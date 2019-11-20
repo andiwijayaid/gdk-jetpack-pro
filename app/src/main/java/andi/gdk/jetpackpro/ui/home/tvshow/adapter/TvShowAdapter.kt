@@ -61,12 +61,12 @@ class TvShowViewHolder(view: View) : androidx.recyclerview.widget.RecyclerView.V
     fun bindItem(context: Context, tvShow: TvShowEntity) {
         itemView.itemParentCV.animation =
             AnimationUtils.loadAnimation(context, R.anim.animation_slide_from_right)
-        itemView.titleTV.text = tvShow.title
+        itemView.titleTV.text = tvShow.originalName
         itemView.dateTV.text = tvShow.firstAirDate
         Glide.with(context)
-            .load("${BuildConfig.IMAGE_URL}t/p/w185${tvShow.poster}")
+            .load("${BuildConfig.IMAGE_URL}t/p/w185${tvShow.posterPath}")
             .into(itemView.posterIV)
-        itemView.ratingBar.rating = normalizeRating(tvShow.rating)
+        itemView.ratingBar.rating = normalizeRating(tvShow.voteAverage)
 
         itemView.setOnClickListener {
             val intent = Intent(context, TvShowDetailActivity::class.java)

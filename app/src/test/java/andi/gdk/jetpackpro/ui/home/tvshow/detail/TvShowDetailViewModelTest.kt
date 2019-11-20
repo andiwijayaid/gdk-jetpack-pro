@@ -25,13 +25,13 @@ class TvShowDetailViewModelTest {
 
     @Test
     fun getTvShow() {
-//        tvShowDetailViewModel.setTvShowTitle(dummyTvShow.title)
+//        tvShowDetailViewModel.setTvShowTitle(dummyTvShow.originalName)
 //        val tvShow = tvShowDetailViewModel.getTvShow()
 //        assertNotNull(tvShow)
-//        assertEquals(dummyTvShow.poster, tvShow.poster)
-//        assertEquals(dummyTvShow.title, tvShow.title)
+//        assertEquals(dummyTvShow.posterPath, tvShow.posterPath)
+//        assertEquals(dummyTvShow.originalName, tvShow.originalName)
 //        assertEquals(dummyTvShow.date, tvShow.date)
-//        assertEquals(dummyTvShow.rating, tvShow.rating)
+//        assertEquals(dummyTvShow.voteAverage, tvShow.voteAverage)
 //        assertEquals(dummyTvShow.runtime, tvShow.runtime)
 //        assertEquals(dummyTvShow.numberOfEpisode, tvShow.numberOfEpisode)
 //        assertEquals(dummyTvShow.language, tvShow.language)
