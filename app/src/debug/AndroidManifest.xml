@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="andi.gdk.jetpackpro">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".testing.SingleFragmentActivity" />
     </application>

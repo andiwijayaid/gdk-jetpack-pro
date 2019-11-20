@@ -9,15 +9,15 @@ data class MovieEntity(
     @SerializedName("id")
     var id: Int? = null,
     @SerializedName("poster_path")
-    var poster: String? = null,
+    var posterPath: String? = null,
     @SerializedName("backdrop_path")
-    var backdrop: String? = null,
+    var backdropPath: String? = null,
     @SerializedName("original_title")
-    var title: String? = null,
+    var originalTitle: String? = null,
     @SerializedName("release_date")
-    var date: String? = null,
+    var releaseDate: String? = null,
     @SerializedName("vote_average")
-    var rating: Float? = null,
+    var voteAverage: Float? = null,
     @SerializedName("overview")
     var overview: String? = null,
     @SerializedName("adult")

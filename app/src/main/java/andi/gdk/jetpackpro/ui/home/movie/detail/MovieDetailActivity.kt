@@ -52,23 +52,23 @@ class MovieDetailActivity : AppCompatActivity() {
         }
 
         val movie = intent.getParcelableExtra<MovieEntity>(EXTRA_MOVIE)
-        titleTV.text = movie?.title
-        dateTV.text = movie?.date
+        titleTV.text = movie?.originalTitle
+        dateTV.text = movie?.releaseDate
         if (movie?.overview != "") {
             overviewTV.text =
                 String.format(resources.getString(R.string.overview_format), movie?.overview)
         }
-        ratingBar.rating = normalizeRating(movie?.rating)
+        ratingBar.rating = normalizeRating(movie?.voteAverage)
 
         budgetTV.visibility = View.GONE
         revenueTV.visibility = View.GONE
         numberOfSeasonTV.visibility = View.INVISIBLE
 
         Glide.with(this)
-            .load("${BuildConfig.IMAGE_URL}t/p/w500${movie?.poster}")
+            .load("${BuildConfig.IMAGE_URL}t/p/w500${movie?.posterPath}")
             .into(posterIV)
         Glide.with(this)
-            .load("${BuildConfig.IMAGE_URL}t/p/original${movie?.backdrop}")
+            .load("${BuildConfig.IMAGE_URL}t/p/original${movie?.backdropPath}")
             .into(posterBackgroundIV)
 
         posterBackgroundIV.animation = AnimationUtils.loadAnimation(this, R.anim.animaton_scale)

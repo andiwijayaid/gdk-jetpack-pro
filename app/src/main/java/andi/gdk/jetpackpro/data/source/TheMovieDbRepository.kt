@@ -8,7 +8,7 @@ import andi.gdk.jetpackpro.response.MovieResponse
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 
-class TheMovieDbRepository private constructor(private val remoteRepository: RemoteRepository) :
+open class TheMovieDbRepository private constructor(private val remoteRepository: RemoteRepository) :
     TheMovieDbDataSource {
 
     companion object {

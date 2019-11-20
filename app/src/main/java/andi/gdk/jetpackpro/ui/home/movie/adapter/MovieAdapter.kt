@@ -59,12 +59,12 @@ class MovieViewHolder(view: View) : androidx.recyclerview.widget.RecyclerView.Vi
     fun bindItem(context: Context, movie: MovieEntity) {
         itemView.itemParentCV.animation =
             AnimationUtils.loadAnimation(context, R.anim.animaton_slide_from_left)
-        itemView.titleTV.text = movie.title
-        itemView.dateTV.text = movie.date
+        itemView.titleTV.text = movie.originalTitle
+        itemView.dateTV.text = movie.releaseDate
         Glide.with(context)
-            .load("${BuildConfig.IMAGE_URL}t/p/w185${movie.poster}")
+            .load("${BuildConfig.IMAGE_URL}t/p/w185${movie.posterPath}")
             .into(itemView.posterIV)
-        itemView.ratingBar.rating = normalizeRating(movie.rating)
+        itemView.ratingBar.rating = normalizeRating(movie.voteAverage)
 
         itemView.setOnClickListener {
             val intent = Intent(context, MovieDetailActivity::class.java)
