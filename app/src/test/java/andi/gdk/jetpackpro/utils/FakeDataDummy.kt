@@ -2,6 +2,8 @@ package andi.gdk.jetpackpro.utils
 
 import andi.gdk.jetpackpro.data.source.local.entity.MovieEntity
 import andi.gdk.jetpackpro.data.source.local.entity.TvShowEntity
+import andi.gdk.jetpackpro.data.source.remote.response.TvShowResponse
+import andi.gdk.jetpackpro.response.MovieResponse
 
 fun generateDummyMovies(): ArrayList<MovieEntity> {
 
@@ -131,6 +133,12 @@ fun generateDummyMovies(): ArrayList<MovieEntity> {
     return movies
 }
 
+fun generateDummyMovie() = MovieResponse(
+    "55000000",
+    "1016599593",
+    122
+)
+
 fun generateDummyTvShows(): ArrayList<TvShowEntity> {
 
     val tvShows = arrayListOf<TvShowEntity>()
@@ -248,3 +256,8 @@ fun generateDummyTvShows(): ArrayList<TvShowEntity> {
 
     return tvShows
 }
+
+fun generateDummyTvShow() = TvShowResponse(
+    36,
+    4
+)

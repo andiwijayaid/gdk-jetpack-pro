@@ -1,40 +1,49 @@
 package andi.gdk.jetpackpro.ui.home.tvshow.detail
 
-import andi.gdk.jetpackpro.data.source.local.entity.TvShowEntity
+import andi.gdk.jetpackpro.data.source.TheMovieDbRepository
+import andi.gdk.jetpackpro.data.source.remote.response.TvShowResponse
+import andi.gdk.jetpackpro.utils.generateDummyTvShow
+import andi.gdk.jetpackpro.utils.generateDummyTvShows
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.mockito.Mockito
+import org.mockito.Mockito.`when`
 
 class TvShowDetailViewModelTest {
-    private lateinit var tvShowDetailViewModel: TvShowDetailViewModel
-    private lateinit var dummyTvShow: TvShowEntity
+
+    @Rule
+    @JvmField
+    var instantTaskExecutorRule = InstantTaskExecutorRule()
+
+    private lateinit var viewModel: TvShowDetailViewModel
+    private val theMovieDbRepository = Mockito.mock(TheMovieDbRepository::class.java)
+    private var dummyTvShow = generateDummyTvShows()[0]
+    private val tvShowId = dummyTvShow.id
+    private val dummyTvShowResponse = generateDummyTvShow()
 
     @Before
     fun setUp() {
-//        tvShowDetailViewModel = TvShowDetailViewModel()
-//        dummyTvShow = TvShowEntity(
-//            "poster_arrow",
-//            "Arrow",
-//            "October 10, 2012",
-//            58,
-//            42,
-//            23,
-//            "English",
-//            "Spoiled billionaire playboy Oliver Queen is missing and presumed dead when his yacht is lost at sea. He returns five years later a changed man, determined to clean up the city as a hooded vigilante armed with a bow."
-//        )
+        viewModel = TvShowDetailViewModel(theMovieDbRepository)
+        viewModel.setId(tvShowId)
     }
 
     @Test
     fun getTvShow() {
-//        tvShowDetailViewModel.setTvShowTitle(dummyTvShow.originalName)
-//        val tvShow = tvShowDetailViewModel.getTvShow()
-//        assertNotNull(tvShow)
-//        assertEquals(dummyTvShow.posterPath, tvShow.posterPath)
-//        assertEquals(dummyTvShow.originalName, tvShow.originalName)
-//        assertEquals(dummyTvShow.date, tvShow.date)
-//        assertEquals(dummyTvShow.voteAverage, tvShow.voteAverage)
-//        assertEquals(dummyTvShow.runtime, tvShow.runtime)
-//        assertEquals(dummyTvShow.numberOfEpisode, tvShow.numberOfEpisode)
-//        assertEquals(dummyTvShow.language, tvShow.language)
-//        assertEquals(dummyTvShow.overview, tvShow.overview)
+        val tvShow = MutableLiveData<TvShowResponse>()
+        tvShow.value = dummyTvShowResponse
+
+        `when`<LiveData<TvShowResponse>>(tvShowId?.let { theMovieDbRepository.getTvShow(it) })
+            .thenReturn(tvShow)
+
+        val observer = Mockito.mock(Observer::class.java) as Observer<TvShowResponse>
+
+        viewModel.tvShow.observeForever(observer)
+
+        Mockito.verify(observer).onChanged(dummyTvShowResponse)
     }
 }
