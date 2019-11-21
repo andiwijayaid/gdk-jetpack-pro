@@ -1,6 +1,7 @@
 package andi.gdk.jetpackpro.ui.home.movie
 
 import andi.gdk.jetpackpro.R
+import andi.gdk.jetpackpro.data.source.local.entity.MovieEntity
 import andi.gdk.jetpackpro.ui.home.movie.adapter.MovieAdapter
 import andi.gdk.jetpackpro.viewmodel.ViewModelFactory
 import android.os.Bundle
@@ -10,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.scwang.smartrefresh.layout.api.RefreshLayout
@@ -20,6 +22,7 @@ class MovieFragment : Fragment() {
 
     private lateinit var movieAdapter: MovieAdapter
     private var movieViewModel: MovieViewModel? = null
+    private lateinit var movies: ArrayList<MovieEntity>
     private var page = 1
 
     companion object {
@@ -39,12 +42,15 @@ class MovieFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         movieAdapter = MovieAdapter(context)
-        showLoading(true)
 
         movieViewModel = obtainViewModel(activity)
 
-        movieViewModel?.setPage(page)
-        setMovies()
+        if (movieViewModel?.countRetrievedMovies() == null) {
+            movieViewModel?.setPage(page)
+            movieViewModel?.setMovies()
+            showLoading(true)
+        }
+        movieViewModel?.movies?.observe(this, getMovies)
 
         movieRV.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         movieRV.setHasFixedSize(true)
@@ -54,39 +60,37 @@ class MovieFragment : Fragment() {
             override fun onLoadMore(refreshLayout: RefreshLayout) {
                 page += 1
                 movieViewModel?.setPage(page)
-                setMovies()
+                movieViewModel?.setMovies()
             }
 
             override fun onRefresh(refreshLayout: RefreshLayout) {
                 page = 1
                 movieViewModel?.setPage(page)
-                setMovies()
+                movieViewModel?.setMovies()
             }
         })
     }
 
-    private fun setMovies() {
-        movieViewModel?.movies?.observe(this, androidx.lifecycle.Observer {
-            showLoading(false)
-
-            refreshLayout.finishRefresh(true)
-            refreshLayout.finishLoadMore(true)
-            if (it != null) {
-                if (page == 1) {
-                    movieAdapter.setMovies(it)
-                } else {
-                    movieAdapter.addMovies(it)
-                }
-                onFailLL.visibility = View.GONE
+    private val getMovies = Observer<ArrayList<MovieEntity>> {
+        this.movies = it
+        showLoading(false)
+        refreshLayout.finishRefresh(true)
+        refreshLayout.finishLoadMore(true)
+        if (it != null) {
+            if (page == 1) {
+                movieAdapter.setMovies(it)
             } else {
-                onFailLL.visibility = View.VISIBLE
-                Toast.makeText(
-                    context,
-                    resources.getString(R.string.check_your_connection),
-                    Toast.LENGTH_LONG
-                ).show()
+                movieAdapter.addMovies(it)
             }
-        })
+            onFailLL.visibility = View.GONE
+        } else {
+            onFailLL.visibility = View.VISIBLE
+            Toast.makeText(
+                context,
+                resources.getString(R.string.check_your_connection),
+                Toast.LENGTH_LONG
+            ).show()
+        }
     }
 
     private fun obtainViewModel(activity: FragmentActivity?): MovieViewModel? {

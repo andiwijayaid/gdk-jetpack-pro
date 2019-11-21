@@ -1,6 +1,7 @@
 package andi.gdk.jetpackpro.ui.home.tvshow
 
 import andi.gdk.jetpackpro.R
+import andi.gdk.jetpackpro.data.source.local.entity.TvShowEntity
 import andi.gdk.jetpackpro.ui.home.tvshow.adapter.TvShowAdapter
 import andi.gdk.jetpackpro.viewmodel.ViewModelFactory
 import android.os.Bundle
@@ -9,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.scwang.smartrefresh.layout.api.RefreshLayout
@@ -19,6 +21,7 @@ class TvShowFragment : androidx.fragment.app.Fragment() {
 
     private lateinit var tvShowAdapter: TvShowAdapter
     private var tvShowViewModel: TvShowViewModel? = null
+    private var tvShows: ArrayList<TvShowEntity>? = null
     private var page = 1
 
     companion object {
@@ -38,11 +41,15 @@ class TvShowFragment : androidx.fragment.app.Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         tvShowAdapter = TvShowAdapter(context)
-        showLoading(true)
 
         tvShowViewModel = obtainViewModel(activity)
-        tvShowViewModel?.setPage(page)
-        setTvShows()
+
+        if (tvShowViewModel?.countRetrievedTvShows() == null) {
+            tvShowViewModel?.setPage(page)
+            tvShowViewModel?.setTvShows()
+            showLoading(true)
+        }
+        tvShowViewModel?.tvShows?.observe(this, getTvShows)
 
         tvShowRV.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         tvShowRV.setHasFixedSize(true)
@@ -52,41 +59,37 @@ class TvShowFragment : androidx.fragment.app.Fragment() {
             override fun onLoadMore(refreshLayout: RefreshLayout) {
                 page += 1
                 tvShowViewModel?.setPage(page)
-                setTvShows()
+                tvShowViewModel?.setTvShows()
             }
 
             override fun onRefresh(refreshLayout: RefreshLayout) {
                 page = 1
                 tvShowViewModel?.setPage(page)
-                setTvShows()
+                tvShowViewModel?.setTvShows()
             }
         })
     }
 
-    private fun setTvShows() {
-
-        tvShowViewModel?.tvShows?.observe(this, androidx.lifecycle.Observer {
-            showLoading(false)
-
-            refreshLayout.finishRefresh(true)
-            refreshLayout.finishLoadMore(true)
-            if (it != null) {
-                if (page == 1) {
-                    tvShowAdapter.setTvShows(it)
-                } else {
-                    tvShowAdapter.addTvShows(it)
-                }
-                onFailLL.visibility = View.GONE
+    private val getTvShows = Observer<ArrayList<TvShowEntity>> {
+        this.tvShows = it
+        showLoading(false)
+        refreshLayout.finishRefresh(true)
+        refreshLayout.finishLoadMore(true)
+        if (it != null) {
+            if (page == 1) {
+                tvShowAdapter.setTvShows(it)
             } else {
-                onFailLL.visibility = View.VISIBLE
-                Toast.makeText(
-                    context,
-                    resources.getString(R.string.check_your_connection),
-                    Toast.LENGTH_LONG
-                ).show()
+                tvShowAdapter.addTvShows(it)
             }
-
-        })
+            onFailLL.visibility = View.GONE
+        } else {
+            onFailLL.visibility = View.VISIBLE
+            Toast.makeText(
+                context,
+                resources.getString(R.string.check_your_connection),
+                Toast.LENGTH_LONG
+            ).show()
+        }
     }
 
     private fun obtainViewModel(activity: FragmentActivity?): TvShowViewModel? {

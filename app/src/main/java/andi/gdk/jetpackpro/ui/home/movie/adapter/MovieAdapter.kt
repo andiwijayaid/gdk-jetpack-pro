@@ -34,6 +34,8 @@ class MovieAdapter(private val context: Context?) :
         notifyDataSetChanged()
     }
 
+    fun getMovies(): ArrayList<MovieEntity> = movies
+
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): MovieViewHolder {
         return MovieViewHolder(
             LayoutInflater.from(p0.context).inflate(

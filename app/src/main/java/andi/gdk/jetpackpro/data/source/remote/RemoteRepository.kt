@@ -13,7 +13,7 @@ import android.util.Log
 import retrofit2.Call
 import retrofit2.Response
 
-class RemoteRepository {
+open class RemoteRepository {
 
     companion object {
         private var INSTANCE: RemoteRepository? = null
@@ -39,8 +39,8 @@ class RemoteRepository {
                 call: Call<MoviesResponse>,
                 response: Response<MoviesResponse>
             ) {
-                EspressoIdlingResource.decrement()
                 loadMoviesCallback.onMoviesRetrieved(response.body()?.movies)
+                EspressoIdlingResource.decrement()
             }
         })
     }

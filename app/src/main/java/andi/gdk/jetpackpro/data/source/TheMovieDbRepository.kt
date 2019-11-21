@@ -43,7 +43,7 @@ open class TheMovieDbRepository private constructor(private val remoteRepository
         return movie
     }
 
-    override fun getMovies(page: Int): LiveData<ArrayList<MovieEntity>> {
+    override fun getMovies(page: Int): MutableLiveData<ArrayList<MovieEntity>> {
 
         val movies = MutableLiveData<ArrayList<MovieEntity>>()
 
@@ -57,9 +57,10 @@ open class TheMovieDbRepository private constructor(private val remoteRepository
         }, page)
 
         return movies
+
     }
 
-    override fun getTvShows(page: Int): LiveData<ArrayList<TvShowEntity>> {
+    override fun getTvShows(page: Int): MutableLiveData<ArrayList<TvShowEntity>> {
 
         val tvShows = MutableLiveData<ArrayList<TvShowEntity>>()
 
