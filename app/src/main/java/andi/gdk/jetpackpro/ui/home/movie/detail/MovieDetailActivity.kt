@@ -3,6 +3,7 @@ package andi.gdk.jetpackpro.ui.home.movie.detail
 import andi.gdk.jetpackpro.BuildConfig
 import andi.gdk.jetpackpro.R
 import andi.gdk.jetpackpro.data.source.local.entity.MovieEntity
+import andi.gdk.jetpackpro.response.MovieResponse
 import andi.gdk.jetpackpro.ui.home.movie.MovieFragment.Companion.EXTRA_MOVIE
 import andi.gdk.jetpackpro.ui.home.movie.MovieFragment.Companion.EXTRA_MOVIE_ID
 import andi.gdk.jetpackpro.utils.convertToCurrency
@@ -24,6 +25,7 @@ import kotlinx.android.synthetic.main.activity_movie_detail.*
 class MovieDetailActivity : AppCompatActivity() {
 
     private var movieDetailViewModel: MovieDetailViewModel? = null
+    private lateinit var movie: MovieResponse
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,31 +75,38 @@ class MovieDetailActivity : AppCompatActivity() {
 
         posterBackgroundIV.animation = AnimationUtils.loadAnimation(this, R.anim.animaton_scale)
 
-        movieDetailViewModel?.movie?.observe(this, Observer {
-            if (it != null) {
-                var mBudget = it.budget
-                var mRevenue = it.revenue
-                mBudget = convertToCurrency(mBudget)
-                mRevenue = convertToCurrency(mRevenue)
-                if (!isZero(it.budget)) {
-                    budgetTV.text = mBudget
-                }
-                if (!isZero(it.revenue)) {
-                    revenueTV.text = mRevenue
-                }
-
-                numberOfSeasonTV.text = it.runtime.toString()
-                stopLoading()
-            } else {
-                stopLoading()
-                Toast.makeText(
-                    applicationContext,
-                    resources.getString(R.string.check_your_connection),
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-        })
+        if (movieDetailViewModel?.movie?.value == null) {
+            movieDetailViewModel?.setMovie()
+        }
+        movieDetailViewModel?.movie?.observe(this, getMovie)
     }
+
+    private val getMovie = Observer<MovieResponse> {
+        movie = it
+        if (it != null) {
+            var mBudget = it.budget
+            var mRevenue = it.revenue
+            mBudget = convertToCurrency(mBudget)
+            mRevenue = convertToCurrency(mRevenue)
+            if (!isZero(it.budget)) {
+                budgetTV.text = mBudget
+            }
+            if (!isZero(it.revenue)) {
+                revenueTV.text = mRevenue
+            }
+
+            numberOfSeasonTV.text = it.runtime.toString()
+            stopLoading()
+        } else {
+            stopLoading()
+            Toast.makeText(
+                applicationContext,
+                resources.getString(R.string.check_your_connection),
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
 
     private fun stopLoading() {
         budgetTV.visibility = View.VISIBLE

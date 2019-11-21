@@ -2,12 +2,14 @@ package andi.gdk.jetpackpro.ui.home.movie.detail
 
 import andi.gdk.jetpackpro.data.source.TheMovieDbRepository
 import andi.gdk.jetpackpro.response.MovieResponse
-import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class MovieDetailViewModel(private val theMovieDbRepository: TheMovieDbRepository) : ViewModel() {
 
     private var id = 0
+
+    var movie = MutableLiveData<MovieResponse>()
 
     fun setId(id: Int?) {
         if (id != null) {
@@ -15,7 +17,8 @@ class MovieDetailViewModel(private val theMovieDbRepository: TheMovieDbRepositor
         }
     }
 
-    val movie: LiveData<MovieResponse>
-        get() = theMovieDbRepository.getMovie(id)
+    fun setMovie() {
+        movie = theMovieDbRepository.getMovie(id)
+    }
 
 }

@@ -3,6 +3,7 @@ package andi.gdk.jetpackpro.ui.home.tvshow.detail
 import andi.gdk.jetpackpro.BuildConfig
 import andi.gdk.jetpackpro.R
 import andi.gdk.jetpackpro.data.source.local.entity.TvShowEntity
+import andi.gdk.jetpackpro.data.source.remote.response.TvShowResponse
 import andi.gdk.jetpackpro.ui.home.tvshow.TvShowFragment.Companion.EXTRA_TV_SHOW
 import andi.gdk.jetpackpro.ui.home.tvshow.TvShowFragment.Companion.EXTRA_TV_SHOW_ID
 import andi.gdk.jetpackpro.utils.normalizeRating
@@ -22,6 +23,7 @@ import kotlinx.android.synthetic.main.activity_tv_show_detail.*
 class TvShowDetailActivity : AppCompatActivity() {
 
     private var tvShowDetailViewModel: TvShowDetailViewModel? = null
+    private lateinit var tvShow: TvShowResponse
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,20 +70,26 @@ class TvShowDetailActivity : AppCompatActivity() {
 
         posterBackgroundIV.animation = AnimationUtils.loadAnimation(this, R.anim.animaton_scale)
 
-        tvShowDetailViewModel?.tvShow?.observe(this, Observer {
-            if (it != null) {
-                stopLoading()
-                numberOfSeasonTV.text = it.numberOfSeasons?.toString()
-                numberOfEpsTV.text = it.numberOfEpisodes?.toString()
-            } else {
-                stopLoading()
-                Toast.makeText(
-                    applicationContext,
-                    resources.getString(R.string.check_your_connection),
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-        })
+        if (tvShowDetailViewModel?.tvShow?.value == null) {
+            tvShowDetailViewModel?.setTvShow()
+        }
+        tvShowDetailViewModel?.tvShow?.observe(this, getTvShow)
+    }
+
+    private val getTvShow = Observer<TvShowResponse> {
+        tvShow = it
+        if (it != null) {
+            stopLoading()
+            numberOfSeasonTV.text = it.numberOfSeasons?.toString()
+            numberOfEpsTV.text = it.numberOfEpisodes?.toString()
+        } else {
+            stopLoading()
+            Toast.makeText(
+                applicationContext,
+                resources.getString(R.string.check_your_connection),
+                Toast.LENGTH_LONG
+            ).show()
+        }
     }
 
     private fun stopLoading() {

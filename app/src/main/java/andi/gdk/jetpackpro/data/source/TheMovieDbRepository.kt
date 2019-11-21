@@ -5,7 +5,6 @@ import andi.gdk.jetpackpro.data.source.local.entity.TvShowEntity
 import andi.gdk.jetpackpro.data.source.remote.RemoteRepository
 import andi.gdk.jetpackpro.data.source.remote.response.TvShowResponse
 import andi.gdk.jetpackpro.response.MovieResponse
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 
 open class TheMovieDbRepository private constructor(private val remoteRepository: RemoteRepository) :
@@ -27,7 +26,7 @@ open class TheMovieDbRepository private constructor(private val remoteRepository
         }
     }
 
-    override fun getMovie(id: Int): LiveData<MovieResponse> {
+    override fun getMovie(id: Int): MutableLiveData<MovieResponse> {
         val movie = MutableLiveData<MovieResponse>()
 
         remoteRepository.getMovie(object : RemoteRepository.LoadMovieCallback {
@@ -77,7 +76,7 @@ open class TheMovieDbRepository private constructor(private val remoteRepository
         return tvShows
     }
 
-    override fun getTvShow(id: Int): LiveData<TvShowResponse> {
+    override fun getTvShow(id: Int): MutableLiveData<TvShowResponse> {
         val tvShow = MutableLiveData<TvShowResponse>()
 
         remoteRepository.getTvShow(object : RemoteRepository.LoadTvShowCallback {

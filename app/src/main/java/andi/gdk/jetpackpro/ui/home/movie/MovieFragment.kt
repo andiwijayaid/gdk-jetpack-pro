@@ -72,7 +72,7 @@ class MovieFragment : Fragment() {
     }
 
     private val getMovies = Observer<ArrayList<MovieEntity>> {
-        this.movies = it
+        movies = it
         showLoading(false)
         refreshLayout.finishRefresh(true)
         refreshLayout.finishLoadMore(true)

@@ -71,7 +71,7 @@ class TvShowFragment : androidx.fragment.app.Fragment() {
     }
 
     private val getTvShows = Observer<ArrayList<TvShowEntity>> {
-        this.tvShows = it
+        tvShows = it
         showLoading(false)
         refreshLayout.finishRefresh(true)
         refreshLayout.finishLoadMore(true)
