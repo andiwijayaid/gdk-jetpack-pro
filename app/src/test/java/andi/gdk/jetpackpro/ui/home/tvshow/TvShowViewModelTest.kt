@@ -40,6 +40,7 @@ class TvShowViewModelTest {
         val observer = Mockito.mock(Observer::class.java) as Observer<ArrayList<TvShowEntity>>
 
         viewModel.setPage(1)
+        viewModel.setTvShows()
         viewModel.tvShows.observeForever(observer)
 
         Mockito.verify(observer).onChanged(dummyMovies)

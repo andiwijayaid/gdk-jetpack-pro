@@ -42,6 +42,7 @@ class TvShowDetailViewModelTest {
 
         val observer = Mockito.mock(Observer::class.java) as Observer<TvShowResponse>
 
+        viewModel.setTvShow()
         viewModel.tvShow.observeForever(observer)
 
         Mockito.verify(observer).onChanged(dummyTvShowResponse)

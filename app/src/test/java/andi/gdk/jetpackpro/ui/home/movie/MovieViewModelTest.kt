@@ -39,6 +39,7 @@ class MovieViewModelTest {
         val observer = mock(Observer::class.java) as Observer<ArrayList<MovieEntity>>
 
         viewModel.setPage(1)
+        viewModel.setMovies()
         viewModel.movies.observeForever(observer)
 
         verify(observer).onChanged(dummyMovies)

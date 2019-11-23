@@ -42,6 +42,7 @@ class MovieDetailViewModelTest {
 
         val observer = mock(Observer::class.java) as Observer<MovieResponse>
 
+        viewModel.setMovie()
         viewModel.movie.observeForever(observer)
 
         verify(observer).onChanged(dummyMovieResponse)
