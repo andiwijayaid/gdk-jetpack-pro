@@ -5,28 +5,13 @@ import andi.gdk.jetpackpro.data.source.local.entity.TvShowEntity
 import andi.gdk.jetpackpro.data.source.remote.RemoteRepository
 import andi.gdk.jetpackpro.data.source.remote.response.TvShowResponse
 import andi.gdk.jetpackpro.response.MovieResponse
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 
-open class TheMovieDbRepository private constructor(private val remoteRepository: RemoteRepository) :
+class FakeTheMovieDbRepository(private val remoteRepository: RemoteRepository) :
     TheMovieDbDataSource {
 
-    companion object {
-        @Volatile
-        private var INSTANCE: TheMovieDbRepository? = null
-
-        fun getInstance(remoteRepository: RemoteRepository): TheMovieDbRepository? {
-            if (INSTANCE == null) {
-                synchronized(TheMovieDbRepository::class.java) {
-                    if (INSTANCE == null) {
-                        INSTANCE = TheMovieDbRepository(remoteRepository)
-                    }
-                }
-            }
-            return INSTANCE
-        }
-    }
-
-    override fun getMovie(id: Int?): MutableLiveData<MovieResponse> {
+    override fun getMovie(id: Int?): LiveData<MovieResponse> {
         val movie = MutableLiveData<MovieResponse>()
 
         remoteRepository.getMovie(object : RemoteRepository.LoadMovieCallback {
@@ -42,7 +27,7 @@ open class TheMovieDbRepository private constructor(private val remoteRepository
         return movie
     }
 
-    override fun getMovies(page: Int): MutableLiveData<ArrayList<MovieEntity>> {
+    override fun getMovies(page: Int): LiveData<ArrayList<MovieEntity>> {
 
         val movies = MutableLiveData<ArrayList<MovieEntity>>()
 
@@ -56,10 +41,9 @@ open class TheMovieDbRepository private constructor(private val remoteRepository
         }, page)
 
         return movies
-
     }
 
-    override fun getTvShows(page: Int): MutableLiveData<ArrayList<TvShowEntity>> {
+    override fun getTvShows(page: Int): LiveData<ArrayList<TvShowEntity>> {
 
         val tvShows = MutableLiveData<ArrayList<TvShowEntity>>()
 
@@ -76,7 +60,7 @@ open class TheMovieDbRepository private constructor(private val remoteRepository
         return tvShows
     }
 
-    override fun getTvShow(id: Int?): MutableLiveData<TvShowResponse> {
+    override fun getTvShow(id: Int?): LiveData<TvShowResponse> {
         val tvShow = MutableLiveData<TvShowResponse>()
 
         remoteRepository.getTvShow(object : RemoteRepository.LoadTvShowCallback {

@@ -9,8 +9,8 @@ import androidx.lifecycle.LiveData
 interface TheMovieDbDataSource {
 
     fun getMovies(page: Int): LiveData<ArrayList<MovieEntity>>
-    fun getMovie(id: Int): LiveData<MovieResponse>
+    fun getMovie(id: Int?): LiveData<MovieResponse>
     fun getTvShows(page: Int): LiveData<ArrayList<TvShowEntity>>
-    fun getTvShow(id: Int): LiveData<TvShowResponse>
+    fun getTvShow(id: Int?): LiveData<TvShowResponse>
 
 }

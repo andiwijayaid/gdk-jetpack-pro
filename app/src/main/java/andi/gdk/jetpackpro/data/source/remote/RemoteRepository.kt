@@ -26,7 +26,7 @@ open class RemoteRepository {
         }
     }
 
-    fun getMovies(loadMoviesCallback: LoadMoviesCallback, page: Int) {
+    fun getMovies(loadMoviesCallback: LoadMoviesCallback?, page: Int) {
         EspressoIdlingResource.increment()
         ApiConfig().instance().getMovies(
             BuildConfig.TOKEN, page
@@ -39,7 +39,7 @@ open class RemoteRepository {
                 call: Call<MoviesResponse>,
                 response: Response<MoviesResponse>
             ) {
-                loadMoviesCallback.onMoviesRetrieved(response.body()?.movies)
+                loadMoviesCallback?.onMoviesRetrieved(response.body()?.movies)
                 EspressoIdlingResource.decrement()
             }
         })
@@ -50,7 +50,7 @@ open class RemoteRepository {
         fun onFail()
     }
 
-    fun getMovie(loadMoviesCallback: LoadMovieCallback, id: Int) {
+    fun getMovie(loadMoviesCallback: LoadMovieCallback?, id: Int?) {
         EspressoIdlingResource.increment()
         ApiConfig().instance().getMovie(id, BuildConfig.TOKEN)
             .enqueue(object : retrofit2.Callback<MovieResponse> {
@@ -63,7 +63,7 @@ open class RemoteRepository {
                     response: Response<MovieResponse>
                 ) {
                     EspressoIdlingResource.decrement()
-                    loadMoviesCallback.onMovieRetrieved(response.body())
+                    loadMoviesCallback?.onMovieRetrieved(response.body())
                 }
             })
     }
@@ -73,7 +73,7 @@ open class RemoteRepository {
         fun onFail()
     }
 
-    fun getTvShows(loadTvShowsCallback: LoadTvShowsCallback, page: Int) {
+    fun getTvShows(loadTvShowsCallback: LoadTvShowsCallback?, page: Int) {
         EspressoIdlingResource.increment()
         ApiConfig().instance().getTvShows(
             BuildConfig.TOKEN, page
@@ -87,7 +87,7 @@ open class RemoteRepository {
                 response: Response<TvShowsResponse>
             ) {
                 EspressoIdlingResource.decrement()
-                loadTvShowsCallback.onTvShowsRetrieved(response.body()?.tvShows)
+                loadTvShowsCallback?.onTvShowsRetrieved(response.body()?.tvShows)
             }
         })
     }
@@ -97,7 +97,7 @@ open class RemoteRepository {
         fun onFail()
     }
 
-    fun getTvShow(loadTvShowCallback: LoadTvShowCallback, id: Int) {
+    fun getTvShow(loadTvShowCallback: LoadTvShowCallback?, id: Int?) {
         EspressoIdlingResource.increment()
         ApiConfig().instance().getTvShow(id, BuildConfig.TOKEN)
             .enqueue(object : retrofit2.Callback<TvShowResponse> {
@@ -110,7 +110,7 @@ open class RemoteRepository {
                     response: Response<TvShowResponse>
                 ) {
                     EspressoIdlingResource.decrement()
-                    loadTvShowCallback.onTvShowRetrieved(response.body())
+                    loadTvShowCallback?.onTvShowRetrieved(response.body())
                 }
             })
     }
