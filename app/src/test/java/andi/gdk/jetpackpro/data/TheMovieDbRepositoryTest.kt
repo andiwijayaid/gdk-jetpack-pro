@@ -2,7 +2,7 @@ package andi.gdk.jetpackpro.data
 
 import andi.gdk.jetpackpro.data.source.FakeTheMovieDbRepository
 import andi.gdk.jetpackpro.data.source.remote.RemoteRepository
-import andi.gdk.jetpackpro.utils.LiveDataTestUtil
+import andi.gdk.jetpackpro.utils.*
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doAnswer

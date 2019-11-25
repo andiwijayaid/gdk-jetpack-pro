@@ -35,7 +35,6 @@ open class TheMovieDbRepository private constructor(private val remoteRepository
             }
 
             override fun onFail() {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
         }, id)
 
@@ -69,7 +68,6 @@ open class TheMovieDbRepository private constructor(private val remoteRepository
             }
 
             override fun onFail() {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
         }, page)
 
@@ -85,7 +83,6 @@ open class TheMovieDbRepository private constructor(private val remoteRepository
             }
 
             override fun onFail() {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
         }, id)
 

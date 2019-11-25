@@ -20,7 +20,6 @@ class FakeTheMovieDbRepository(private val remoteRepository: RemoteRepository) :
             }
 
             override fun onFail() {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
         }, id)
 
@@ -53,7 +52,6 @@ class FakeTheMovieDbRepository(private val remoteRepository: RemoteRepository) :
             }
 
             override fun onFail() {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
         }, page)
 
@@ -69,7 +67,6 @@ class FakeTheMovieDbRepository(private val remoteRepository: RemoteRepository) :
             }
 
             override fun onFail() {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
         }, id)
 
