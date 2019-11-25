@@ -8,6 +8,8 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertNotNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -46,6 +48,7 @@ class MovieDetailViewModelTest {
         viewModel.movie.observeForever(observer)
 
         verify(observer).onChanged(dummyMovieResponse)
-
+        assertNotNull(viewModel.movie)
+        assertEquals(movie.value, dummyMovieResponse)
     }
 }

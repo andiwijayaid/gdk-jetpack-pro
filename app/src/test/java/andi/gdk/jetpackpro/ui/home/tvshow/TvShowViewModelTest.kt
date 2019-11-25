@@ -7,6 +7,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import junit.framework.TestCase
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -27,14 +28,14 @@ class TvShowViewModelTest {
 
     @Test
     fun getTvShows() {
-        val dummyMovies = generateDummyTvShows()
+        val dummyTvShows = generateDummyTvShows()
 
-        val movies = MutableLiveData<ArrayList<TvShowEntity>>()
-        movies.value = dummyMovies
+        val tvShows = MutableLiveData<ArrayList<TvShowEntity>>()
+        tvShows.value = dummyTvShows
 
         Mockito.`when`<LiveData<ArrayList<TvShowEntity>>>(theMovieDbRepository.getTvShows(1))
             .thenReturn(
-                movies
+                tvShows
             )
 
         val observer = Mockito.mock(Observer::class.java) as Observer<ArrayList<TvShowEntity>>
@@ -43,6 +44,8 @@ class TvShowViewModelTest {
         viewModel.setTvShows()
         viewModel.tvShows.observeForever(observer)
 
-        Mockito.verify(observer).onChanged(dummyMovies)
+        Mockito.verify(observer).onChanged(dummyTvShows)
+        TestCase.assertNotNull(viewModel.tvShows)
+        TestCase.assertEquals(tvShows.value?.size, viewModel.countRetrievedTvShows())
     }
 }

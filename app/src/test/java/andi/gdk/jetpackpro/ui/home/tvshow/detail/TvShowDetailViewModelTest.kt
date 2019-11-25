@@ -8,6 +8,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import junit.framework.TestCase
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -46,5 +47,7 @@ class TvShowDetailViewModelTest {
         viewModel.tvShow.observeForever(observer)
 
         Mockito.verify(observer).onChanged(dummyTvShowResponse)
+        TestCase.assertNotNull(viewModel.tvShow)
+        TestCase.assertEquals(tvShow.value, dummyTvShowResponse)
     }
 }

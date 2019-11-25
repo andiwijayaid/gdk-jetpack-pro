@@ -7,6 +7,8 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertNotNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -43,5 +45,7 @@ class MovieViewModelTest {
         viewModel.movies.observeForever(observer)
 
         verify(observer).onChanged(dummyMovies)
+        assertNotNull(viewModel.movies)
+        assertEquals(movies.value?.size, viewModel.countRetrievedMovies())
     }
 }
