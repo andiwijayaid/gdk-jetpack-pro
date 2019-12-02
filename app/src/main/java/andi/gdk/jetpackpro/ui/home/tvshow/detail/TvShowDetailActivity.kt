@@ -2,7 +2,6 @@ package andi.gdk.jetpackpro.ui.home.tvshow.detail
 
 import andi.gdk.jetpackpro.BuildConfig
 import andi.gdk.jetpackpro.R
-import andi.gdk.jetpackpro.data.source.local.entity.TvShowDetailEntity
 import andi.gdk.jetpackpro.data.source.local.entity.TvShowEntity
 import andi.gdk.jetpackpro.ui.home.tvshow.TvShowFragment.Companion.EXTRA_TV_SHOW
 import andi.gdk.jetpackpro.ui.home.tvshow.TvShowFragment.Companion.EXTRA_TV_SHOW_ID
@@ -24,7 +23,7 @@ import kotlinx.android.synthetic.main.activity_tv_show_detail.*
 class TvShowDetailActivity : AppCompatActivity() {
 
     private var tvShowDetailViewModel: TvShowDetailViewModel? = null
-    private lateinit var tvShow: TvShowDetailEntity
+    private var tvShow: TvShowEntity? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +49,7 @@ class TvShowDetailActivity : AppCompatActivity() {
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_close)
         toolbar.setNavigationOnClickListener { finish() }
 
-        val tvShow = intent.getParcelableExtra<TvShowEntity>(EXTRA_TV_SHOW)
+        tvShow = intent.getParcelableExtra<TvShowEntity>(EXTRA_TV_SHOW)
         titleTV.text = tvShow?.originalName
         dateTV.text = tvShow?.firstAirDate
         ratingBar.rating = normalizeRating(tvShow?.voteAverage)
@@ -71,7 +70,16 @@ class TvShowDetailActivity : AppCompatActivity() {
 
         posterBackgroundIV.animation = AnimationUtils.loadAnimation(this, R.anim.animaton_scale)
 
+        checkFavoriteStatus()
         setTvShow()
+
+        favoriteBT.setOnClickListener {
+            tvShowDetailViewModel?.setFavorite(tvShow)
+        }
+    }
+
+    private fun checkFavoriteStatus() {
+        favoriteBT.isChecked = tvShow?.isFavorite!!
     }
 
     private fun setTvShow() {

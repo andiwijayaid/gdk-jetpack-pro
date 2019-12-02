@@ -2,6 +2,7 @@ package andi.gdk.jetpackpro.ui.home.tvshow.detail
 
 import andi.gdk.jetpackpro.data.source.TheMovieDbRepository
 import andi.gdk.jetpackpro.data.source.local.entity.TvShowDetailEntity
+import andi.gdk.jetpackpro.data.source.local.entity.TvShowEntity
 import andi.gdk.jetpackpro.vo.Resource
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -23,4 +24,13 @@ class TvShowDetailViewModel(private val theMovieDbRepository: TheMovieDbReposito
         }
     }
 
+    fun setFavorite(tvShowEntity: TvShowEntity?) {
+        if (tvShow.value != null) {
+            val movie = tvShow.value!!.data
+            if (movie != null && tvShowEntity != null) {
+                theMovieDbRepository.setFavoriteTvShow(tvShowEntity)
+                theMovieDbRepository.setFavoriteTvShowDetail(movie)
+            }
+        }
+    }
 }

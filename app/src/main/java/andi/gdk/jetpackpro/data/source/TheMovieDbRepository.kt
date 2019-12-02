@@ -161,6 +161,30 @@ open class TheMovieDbRepository private constructor(
         }.asLiveData()
     }
 
+    override fun getFavoriteTvShows(): LiveData<Resource<PagedList<TvShowEntity>>> {
+        return object :
+            NetworkBoundResource<PagedList<TvShowEntity>, List<TvShowEntity>>(appExecutors) {
+            override fun loadFromDB(): LiveData<PagedList<TvShowEntity>> {
+                return LivePagedListBuilder(
+                    localRepository.getFavoriteTvShows() as DataSource.Factory<Int, TvShowEntity>,
+                    10
+                ).build()
+            }
+
+            override fun shouldFetch(data: PagedList<TvShowEntity>?): Boolean {
+                return false
+            }
+
+            override fun createCall(): LiveData<ApiResponse<List<TvShowEntity>>>? {
+                return null
+            }
+
+            override fun saveCallResult(data: List<TvShowEntity>?) {
+            }
+
+        }.asLiveData()
+    }
+
     override fun setFavoriteMovie(movieEntity: MovieEntity) {
         val runnable = Runnable { localRepository.setFavoriteMovie(movieEntity) }
         appExecutors.diskIO().execute(runnable)
@@ -168,6 +192,16 @@ open class TheMovieDbRepository private constructor(
 
     override fun setFavoriteMovieDetail(movieDetailEntity: MovieDetailEntity) {
         val runnable = Runnable { localRepository.setFavoriteMovieDetail(movieDetailEntity) }
+        appExecutors.diskIO().execute(runnable)
+    }
+
+    override fun setFavoriteTvShow(tvShowEntity: TvShowEntity) {
+        val runnable = Runnable { localRepository.setFavoriteTvShow(tvShowEntity) }
+        appExecutors.diskIO().execute(runnable)
+    }
+
+    override fun setFavoriteTvShowDetail(tvShowDetailEntity: TvShowDetailEntity) {
+        val runnable = Runnable { localRepository.setFavoriteTvShowDetail(tvShowDetailEntity) }
         appExecutors.diskIO().execute(runnable)
     }
 

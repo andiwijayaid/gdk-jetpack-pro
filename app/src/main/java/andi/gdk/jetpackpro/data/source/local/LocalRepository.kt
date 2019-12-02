@@ -42,6 +42,10 @@ class LocalRepository private constructor(
         return movieDao?.getFavoriteMovies()
     }
 
+    fun getFavoriteTvShows(): DataSource.Factory<Int, TvShowEntity>? {
+        return tvShowDao?.getFavotiteTvShows()
+    }
+
     fun getMovieDetail(movieId: Int): LiveData<MovieDetailEntity>? {
         return movieDetailDao?.getMovieDetail(movieId)
     }
@@ -77,6 +81,16 @@ class LocalRepository private constructor(
     fun setFavoriteMovieDetail(movieDetailEntity: MovieDetailEntity) {
         movieDetailEntity.isFavorite = !movieDetailEntity.isFavorite
         movieDetailDao?.updateMovieDetail(movieDetailEntity)
+    }
+
+    fun setFavoriteTvShow(tvShowEntity: TvShowEntity) {
+        tvShowEntity.isFavorite = !tvShowEntity.isFavorite
+        tvShowDao?.updateTvShow(tvShowEntity)
+    }
+
+    fun setFavoriteTvShowDetail(tvShowDetailEntity: TvShowDetailEntity) {
+        tvShowDetailEntity.isFavorite = !tvShowDetailEntity.isFavorite
+        tvShowDetailDao?.updateTvShowDetail(tvShowDetailEntity)
     }
 
 }

@@ -12,7 +12,4 @@ class FavoriteMovieViewModel(private val theMovieDbRepository: TheMovieDbReposit
     val favoriteMovies: LiveData<Resource<PagedList<MovieEntity>>>
         get() = theMovieDbRepository.getFavoriteMovies()
 
-    fun setFavoriteMovies(movieEntity: MovieEntity) {
-//        theMovieDbRepository.
-    }
 }

@@ -9,17 +9,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import androidx.paging.PagedListAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.item_favorite.view.*
 
-class FavoriteTvShowAdapter(
-    private val context: Context?,
-    private val listener: (TvShowEntity, Int) -> Unit
-) :
-    RecyclerView.Adapter<FavoriteTvSeriesViewHolder>() {
+class FavoriteTvShowAdapter(private val context: Context?) :
+    PagedListAdapter<TvShowEntity, FavoriteTvShowAdapter.FavoriteTvSeriesViewHolder>(DIFF_CALLBACK) {
 
-    private val mData = ArrayList<TvShowEntity>()
+    companion object {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<TvShowEntity>() {
+            override fun areContentsTheSame(oldItem: TvShowEntity, newItem: TvShowEntity): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areItemsTheSame(oldItem: TvShowEntity, newItem: TvShowEntity): Boolean {
+                return oldItem == newItem
+            }
+        }
+    }
 
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): FavoriteTvSeriesViewHolder {
         return FavoriteTvSeriesViewHolder(
@@ -31,43 +40,24 @@ class FavoriteTvShowAdapter(
         )
     }
 
-    override fun getItemCount(): Int = mData.size
-
-    override fun onBindViewHolder(p0: FavoriteTvSeriesViewHolder, p1: Int) {
+    override fun onBindViewHolder(holder: FavoriteTvSeriesViewHolder, position: Int) {
         if (context != null) {
-            p0.bindItem(context, mData[p1], listener)
+            getItem(position)?.let { holder.bindItem(context, it) }
         }
     }
 
-    fun getTvSeries(): ArrayList<TvShowEntity> {
-        return mData
-    }
+    class FavoriteTvSeriesViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-    fun setTvSeries(tvSeries: ArrayList<TvShowEntity>) {
-        mData.clear()
-        mData.addAll(tvSeries)
-        notifyDataSetChanged()
-    }
-
-    fun removeItem(position: Int) {
-        mData.removeAt(position)
-        notifyItemRemoved(position)
-    }
-
-}
-
-class FavoriteTvSeriesViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-
-    fun bindItem(context: Context, tvSeries: TvShowEntity, listener: (TvShowEntity, Int) -> Unit) {
-        itemView.itemParentCV.animation =
-            AnimationUtils.loadAnimation(context, R.anim.animaton_slide_from_left)
-        itemView.titleTV.text = tvSeries.originalName
-        Glide.with(context)
-            .load("${BuildConfig.IMAGE_URL}t/p/w185${tvSeries.posterPath}")
-            .into(itemView.posterIV)
-        itemView.ratingBar.rating = normalizeRating(tvSeries.voteAverage)
-        itemView.setOnClickListener {
-            listener(tvSeries, layoutPosition)
+        fun bindItem(context: Context, tvSeries: TvShowEntity) {
+            itemView.itemParentCV.animation =
+                AnimationUtils.loadAnimation(context, R.anim.animaton_slide_from_left)
+            itemView.titleTV.text = tvSeries.originalName
+            Glide.with(context)
+                .load("${BuildConfig.IMAGE_URL}t/p/w185${tvSeries.posterPath}")
+                .into(itemView.posterIV)
+            itemView.ratingBar.rating = normalizeRating(tvSeries.voteAverage)
+            itemView.setOnClickListener {
+            }
         }
     }
 }
