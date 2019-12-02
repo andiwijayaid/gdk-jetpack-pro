@@ -2,22 +2,25 @@ package andi.gdk.jetpackpro.ui.home.tvshow.detail
 
 import andi.gdk.jetpackpro.data.source.TheMovieDbRepository
 import andi.gdk.jetpackpro.data.source.local.entity.TvShowDetailEntity
+import andi.gdk.jetpackpro.vo.Resource
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 
 class TvShowDetailViewModel(private val theMovieDbRepository: TheMovieDbRepository) : ViewModel() {
 
-    private var id = 0
-    var tvShow = MutableLiveData<TvShowDetailEntity>()
+    private var id = MutableLiveData<Int>()
+
+    var tvShow: LiveData<Resource<TvShowDetailEntity>> = Transformations.switchMap(id) {
+        theMovieDbRepository.getTvShow(it)
+    }
+
 
     fun setId(id: Int?) {
         if (id != null) {
-            this.id = id
+            this.id.value = id
         }
-    }
-
-    fun setTvShow() {
-//        tvShow = theMovieDbRepository.getTvShow(id)
     }
 
 }

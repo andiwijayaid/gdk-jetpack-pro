@@ -2,6 +2,7 @@
     <string name="app_name">POPFlix</string>
     <string name="movie">Movie</string>
     <string name="tv_show">TV Show</string>
+    <string name="favorite">Favorite</string>
     <string name="title">Title</string>
     <string name="poster">poster</string>
     <string name="rating">Rating</string>
@@ -19,4 +20,6 @@
     <string name="check_your_connection">check your connection</string>
     <string name="not_available">NA</string>
     <string name="number_of_season">No of Season</string>
+    <string name="no_favorite">No Favorite</string>
+    <string name="something_went_wrong">Something went wrong</string>
 </resources>

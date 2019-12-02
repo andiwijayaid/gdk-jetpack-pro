@@ -7,9 +7,9 @@ import andi.gdk.jetpackpro.response.MovieResponse
 import andi.gdk.jetpackpro.ui.home.movie.MovieFragment.Companion.EXTRA_MOVIE
 import andi.gdk.jetpackpro.ui.home.movie.MovieFragment.Companion.EXTRA_MOVIE_ID
 import andi.gdk.jetpackpro.utils.convertToCurrency
-import andi.gdk.jetpackpro.utils.isZero
 import andi.gdk.jetpackpro.utils.normalizeRating
 import andi.gdk.jetpackpro.viewmodel.ViewModelFactory
+import andi.gdk.jetpackpro.vo.Status
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
@@ -64,7 +64,7 @@ class MovieDetailActivity : AppCompatActivity() {
 
         budgetTV.visibility = View.GONE
         revenueTV.visibility = View.GONE
-        numberOfSeasonTV.visibility = View.INVISIBLE
+        runTimeTV.visibility = View.INVISIBLE
 
         Glide.with(this)
             .load("${BuildConfig.IMAGE_URL}t/p/w500${movie?.posterPath}")
@@ -75,47 +75,52 @@ class MovieDetailActivity : AppCompatActivity() {
 
         posterBackgroundIV.animation = AnimationUtils.loadAnimation(this, R.anim.animaton_scale)
 
-        if (movieDetailViewModel?.movie?.value == null) {
-            movieDetailViewModel?.setMovie()
+        setMovie()
+
+        favoriteBT.setOnClickListener {
+            movieDetailViewModel
         }
-        movieDetailViewModel?.movie?.observe(this, getMovie)
     }
 
-    private val getMovie = Observer<MovieResponse> {
-        movie = it
-        if (it != null) {
-            var mBudget = it.budget
-            var mRevenue = it.revenue
-            mBudget = convertToCurrency(mBudget)
-            mRevenue = convertToCurrency(mRevenue)
-            if (!isZero(it.budget)) {
-                budgetTV.text = mBudget
-            }
-            if (!isZero(it.revenue)) {
-                revenueTV.text = mRevenue
-            }
+    private fun setMovie() {
+        movieDetailViewModel?.movie?.observe(this, Observer {
+            if (it != null) {
+                when (it.status) {
+                    Status.LOADING -> {
+                        budgetTV.visibility = View.GONE
+                        revenueTV.visibility = View.GONE
 
-            numberOfSeasonTV.text = it.runtime.toString()
-            stopLoading()
-        } else {
-            stopLoading()
-            Toast.makeText(
-                applicationContext,
-                resources.getString(R.string.check_your_connection),
-                Toast.LENGTH_LONG
-            ).show()
-        }
+                        budgetPB.visibility = View.VISIBLE
+                        revenuePB.visibility = View.VISIBLE
+                    }
+                    Status.SUCCESS -> {
+                        stopLoading()
+                        budgetTV.text = convertToCurrency(it.data?.budget.toString())
+                        revenueTV.text = convertToCurrency(it.data?.revenue.toString())
+                        runTimeTV.text = it.data?.runtime.toString()
+                    }
+                    Status.ERROR -> {
+                        stopLoading()
+                        Toast.makeText(
+                            this,
+                            getString(R.string.check_your_connection),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
+        })
     }
 
 
     private fun stopLoading() {
         budgetTV.visibility = View.VISIBLE
         revenueTV.visibility = View.VISIBLE
-        numberOfSeasonTV.visibility = View.VISIBLE
+        runTimeTV.visibility = View.VISIBLE
 
         budgetPB.visibility = View.GONE
         revenuePB.visibility = View.GONE
-        numberOfSeasonPB.visibility = View.GONE
+        runTimePB.visibility = View.GONE
     }
 
     private fun obtainViewModel(activity: FragmentActivity?): MovieDetailViewModel? {

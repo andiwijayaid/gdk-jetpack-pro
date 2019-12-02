@@ -60,7 +60,7 @@ class TvShowDetailActivityTest {
         onView(withId(R.id.numberOfEpsTV)).check(matches(isDisplayed()))
         onView(withId(R.id.numberOfEpsTV)).check(matches(withText(dummyTvShowResponse.numberOfEpisodes.toString())))
 
-        onView(withId(R.id.numberOfSeasonTV)).check(matches(isDisplayed()))
-        onView(withId(R.id.numberOfSeasonTV)).check(matches(withText(dummyTvShowResponse.numberOfSeasons.toString())))
+        onView(withId(R.id.runTimeTV)).check(matches(isDisplayed()))
+        onView(withId(R.id.runTimeTV)).check(matches(withText(dummyTvShowResponse.numberOfSeasons.toString())))
     }
 }

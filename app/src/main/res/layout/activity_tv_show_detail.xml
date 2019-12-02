@@ -143,7 +143,7 @@
             app:layout_constraintVertical_bias="1.0" />
 
         <ProgressBar
-            android:id="@+id/numberOfSeasonPB"
+            android:id="@+id/runTimePB"
             style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -280,6 +280,27 @@
             app:layout_constraintStart_toEndOf="@+id/textView11"
             app:layout_constraintTop_toBottomOf="@+id/overviewTV"
             app:layout_constraintVertical_bias="0.0" />
+
+        <com.sackcentury.shinebuttonlib.ShineButton
+            android:id="@+id/favoriteBT"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+            app:allow_random_color="false"
+            app:big_shine_color="#FF6666"
+            app:btn_color="@android:color/darker_gray"
+            app:btn_fill_color="#FF6666"
+            app:click_animation_duration="200"
+            app:enable_flashing="false"
+            app:layout_constraintEnd_toEndOf="@+id/toolbar"
+            app:layout_constraintTop_toTopOf="@+id/toolbar"
+            app:shine_animation_duration="1500"
+            app:shine_count="8"
+            app:shine_turn_angle="10"
+            app:siShape="@raw/heart"
+            app:small_shine_color="#CC9999"
+            app:small_shine_offset_angle="20" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -8,6 +8,7 @@ import andi.gdk.jetpackpro.ui.home.tvshow.TvShowFragment.Companion.EXTRA_TV_SHOW
 import andi.gdk.jetpackpro.ui.home.tvshow.TvShowFragment.Companion.EXTRA_TV_SHOW_ID
 import andi.gdk.jetpackpro.utils.normalizeRating
 import andi.gdk.jetpackpro.viewmodel.ViewModelFactory
+import andi.gdk.jetpackpro.vo.Status
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
@@ -70,33 +71,43 @@ class TvShowDetailActivity : AppCompatActivity() {
 
         posterBackgroundIV.animation = AnimationUtils.loadAnimation(this, R.anim.animaton_scale)
 
-        if (tvShowDetailViewModel?.tvShow?.value == null) {
-            tvShowDetailViewModel?.setTvShow()
-        }
-        tvShowDetailViewModel?.tvShow?.observe(this, getTvShow)
+        setTvShow()
     }
 
-    private val getTvShow = Observer<TvShowDetailEntity> {
-        tvShow = it
-        if (it != null) {
-            stopLoading()
-            numberOfSeasonTV.text = it.numberOfSeasons?.toString()
-            numberOfEpsTV.text = it.numberOfEpisodes?.toString()
-        } else {
-            stopLoading()
-            Toast.makeText(
-                applicationContext,
-                resources.getString(R.string.check_your_connection),
-                Toast.LENGTH_LONG
-            ).show()
-        }
+    private fun setTvShow() {
+        tvShowDetailViewModel?.tvShow?.observe(this, Observer {
+            if (it != null) {
+                when (it.status) {
+                    Status.LOADING -> {
+                        numberOfSeasonTV.visibility = View.INVISIBLE
+                        numberOfEpsTV.visibility = View.INVISIBLE
+
+                        runTimePB.visibility = View.VISIBLE
+                        numberOfEpsPB.visibility = View.VISIBLE
+                    }
+                    Status.SUCCESS -> {
+                        stopLoading()
+                        numberOfSeasonTV.text = it.data?.numberOfEpisodes.toString()
+                        numberOfEpsTV.text = it.data?.numberOfSeasons.toString()
+                    }
+                    Status.ERROR -> {
+                        stopLoading()
+                        Toast.makeText(
+                            this,
+                            getString(R.string.check_your_connection),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
+        })
     }
 
     private fun stopLoading() {
         numberOfSeasonTV.visibility = View.VISIBLE
         numberOfEpsTV.visibility = View.VISIBLE
 
-        numberOfSeasonPB.visibility = View.INVISIBLE
+        runTimePB.visibility = View.INVISIBLE
         numberOfEpsPB.visibility = View.INVISIBLE
     }
 

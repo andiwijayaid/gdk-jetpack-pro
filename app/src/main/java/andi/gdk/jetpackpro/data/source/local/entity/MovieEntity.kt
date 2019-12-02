@@ -14,7 +14,7 @@ data class MovieEntity(
     @SerializedName("id")
     @ColumnInfo(name = "id")
     @PrimaryKey
-    var id: Int? = null,
+    var id: Int,
 
     @SerializedName("poster_path")
     @ColumnInfo(name = "poster_path")

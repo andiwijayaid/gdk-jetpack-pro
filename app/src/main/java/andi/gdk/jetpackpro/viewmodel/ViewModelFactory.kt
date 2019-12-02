@@ -2,6 +2,7 @@ package andi.gdk.jetpackpro.viewmodel
 
 import andi.gdk.jetpackpro.data.source.TheMovieDbRepository
 import andi.gdk.jetpackpro.di.Injection
+import andi.gdk.jetpackpro.ui.home.favorite.movie.FavoriteMovieViewModel
 import andi.gdk.jetpackpro.ui.home.movie.MovieViewModel
 import andi.gdk.jetpackpro.ui.home.movie.detail.MovieDetailViewModel
 import andi.gdk.jetpackpro.ui.home.tvshow.TvShowViewModel
@@ -26,6 +27,9 @@ class ViewModelFactory private constructor(private val theMovieDbRepository: The
                 theMovieDbRepository
             ) as T
             modelClass.isAssignableFrom(TvShowDetailViewModel::class.java) -> TvShowDetailViewModel(
+                theMovieDbRepository
+            ) as T
+            modelClass.isAssignableFrom(FavoriteMovieViewModel::class.java) -> FavoriteMovieViewModel(
                 theMovieDbRepository
             ) as T
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
