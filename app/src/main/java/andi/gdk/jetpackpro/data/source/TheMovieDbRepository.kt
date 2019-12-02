@@ -161,4 +161,14 @@ open class TheMovieDbRepository private constructor(
         }.asLiveData()
     }
 
+    override fun setFavoriteMovie(movieEntity: MovieEntity) {
+        val runnable = Runnable { localRepository.setFavoriteMovie(movieEntity) }
+        appExecutors.diskIO().execute(runnable)
+    }
+
+    override fun setFavoriteMovieDetail(movieDetailEntity: MovieDetailEntity) {
+        val runnable = Runnable { localRepository.setFavoriteMovieDetail(movieDetailEntity) }
+        appExecutors.diskIO().execute(runnable)
+    }
+
 }

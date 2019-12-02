@@ -2,6 +2,7 @@ package andi.gdk.jetpackpro.ui.home.movie.detail
 
 import andi.gdk.jetpackpro.data.source.TheMovieDbRepository
 import andi.gdk.jetpackpro.data.source.local.entity.MovieDetailEntity
+import andi.gdk.jetpackpro.data.source.local.entity.MovieEntity
 import andi.gdk.jetpackpro.vo.Resource
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -22,4 +23,13 @@ class MovieDetailViewModel(private val theMovieDbRepository: TheMovieDbRepositor
         }
     }
 
+    fun setFavorite(movieEntity: MovieEntity?) {
+        if (movie.value != null) {
+            val movie = movie.value!!.data
+            if (movie != null && movieEntity != null) {
+                theMovieDbRepository.setFavoriteMovie(movieEntity)
+                theMovieDbRepository.setFavoriteMovieDetail(movie)
+            }
+        }
+    }
 }

@@ -3,7 +3,6 @@ package andi.gdk.jetpackpro.ui.home.movie.detail
 import andi.gdk.jetpackpro.BuildConfig
 import andi.gdk.jetpackpro.R
 import andi.gdk.jetpackpro.data.source.local.entity.MovieEntity
-import andi.gdk.jetpackpro.response.MovieResponse
 import andi.gdk.jetpackpro.ui.home.movie.MovieFragment.Companion.EXTRA_MOVIE
 import andi.gdk.jetpackpro.ui.home.movie.MovieFragment.Companion.EXTRA_MOVIE_ID
 import andi.gdk.jetpackpro.utils.convertToCurrency
@@ -25,7 +24,7 @@ import kotlinx.android.synthetic.main.activity_movie_detail.*
 class MovieDetailActivity : AppCompatActivity() {
 
     private var movieDetailViewModel: MovieDetailViewModel? = null
-    private lateinit var movie: MovieResponse
+    private var movie: MovieEntity? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +52,7 @@ class MovieDetailActivity : AppCompatActivity() {
             finish()
         }
 
-        val movie = intent.getParcelableExtra<MovieEntity>(EXTRA_MOVIE)
+        movie = intent.getParcelableExtra(EXTRA_MOVIE)
         titleTV.text = movie?.originalTitle
         dateTV.text = movie?.releaseDate
         if (movie?.overview != "") {
@@ -75,11 +74,16 @@ class MovieDetailActivity : AppCompatActivity() {
 
         posterBackgroundIV.animation = AnimationUtils.loadAnimation(this, R.anim.animaton_scale)
 
+        checkFavoriteStatus()
         setMovie()
 
         favoriteBT.setOnClickListener {
-            movieDetailViewModel
+            movieDetailViewModel?.setFavorite(movie)
         }
+    }
+
+    private fun checkFavoriteStatus() {
+        favoriteBT.isChecked = movie?.isFavorite!!
     }
 
     private fun setMovie() {

@@ -69,4 +69,14 @@ class LocalRepository private constructor(
         tvShowDetailDao?.insertTvShowDetail(tvShowDetail)
     }
 
+    fun setFavoriteMovie(movieEntity: MovieEntity) {
+        movieEntity.isFavorite = !movieEntity.isFavorite
+        movieDao?.updateMovie(movieEntity)
+    }
+
+    fun setFavoriteMovieDetail(movieDetailEntity: MovieDetailEntity) {
+        movieDetailEntity.isFavorite = !movieDetailEntity.isFavorite
+        movieDetailDao?.updateMovieDetail(movieDetailEntity)
+    }
+
 }

@@ -25,5 +25,7 @@ data class MovieDetailEntity(
 
     @SerializedName("runtime")
     @ColumnInfo(name = "runtime")
-    var runtime: Int?
+    var runtime: Int?,
+
+    var isFavorite: Boolean = false
 ) : Parcelable

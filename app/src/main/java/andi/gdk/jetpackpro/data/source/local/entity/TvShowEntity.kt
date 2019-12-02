@@ -40,6 +40,6 @@ data class TvShowEntity(
     @ColumnInfo(name = "overview")
     var overview: String? = null,
 
-    var isFavorite: Boolean? = false
+    var isFavorite: Boolean = false
 
 ) : Parcelable

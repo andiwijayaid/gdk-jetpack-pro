@@ -44,6 +44,6 @@ data class MovieEntity(
     @ColumnInfo(name = "is_adult")
     var isAdult: Boolean? = null,
 
-    var isFavorite: Boolean? = false
+    var isFavorite: Boolean = false
 
 ) : Parcelable

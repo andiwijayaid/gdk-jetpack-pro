@@ -21,5 +21,7 @@ data class TvShowDetailEntity(
 
     @SerializedName("number_of_seasons")
     @ColumnInfo(name = "number_of_seasons")
-    var numberOfSeasons: Int?
+    var numberOfSeasons: Int?,
+
+    var isFavorite: Boolean = false
 ) : Parcelable

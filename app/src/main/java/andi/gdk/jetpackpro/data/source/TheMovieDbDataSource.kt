@@ -15,6 +15,9 @@ interface TheMovieDbDataSource {
     fun getTvShows(): LiveData<Resource<List<TvShowEntity>>>
     fun getTvShow(id: Int): LiveData<Resource<TvShowDetailEntity>>
 
+    fun setFavoriteMovie(movieEntity: MovieEntity)
+    fun setFavoriteMovieDetail(movieDetailEntity: MovieDetailEntity)
+
     fun getFavoriteMovies(): LiveData<Resource<PagedList<MovieEntity>>>
 
 }
