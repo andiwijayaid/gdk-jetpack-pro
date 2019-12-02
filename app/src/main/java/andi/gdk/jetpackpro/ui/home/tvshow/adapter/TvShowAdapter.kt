@@ -23,15 +23,9 @@ class TvShowAdapter(private val context: Context?) :
 
     private val tvShows = arrayListOf<TvShowEntity>()
 
-    fun setTvShows(tvShows: ArrayList<TvShowEntity>?) {
+    fun setTvShows(tvShows: List<TvShowEntity>?) {
         if (tvShows == null) return
         this.tvShows.clear()
-        this.tvShows.addAll(tvShows)
-        notifyDataSetChanged()
-    }
-
-    fun addTvShows(tvShows: ArrayList<TvShowEntity>?) {
-        if (tvShows == null) return
         this.tvShows.addAll(tvShows)
         notifyDataSetChanged()
     }

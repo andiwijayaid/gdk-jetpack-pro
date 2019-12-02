@@ -1,14 +1,15 @@
 package andi.gdk.jetpackpro.ui.home.tvshow
 
 import andi.gdk.jetpackpro.R
-import andi.gdk.jetpackpro.data.source.local.entity.TvShowEntity
 import andi.gdk.jetpackpro.ui.home.tvshow.adapter.TvShowAdapter
 import andi.gdk.jetpackpro.viewmodel.ViewModelFactory
+import andi.gdk.jetpackpro.vo.Status
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -17,11 +18,10 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadMoreListener
 import kotlinx.android.synthetic.main.fragment_tv_show.*
 
-class TvShowFragment : androidx.fragment.app.Fragment() {
+class TvShowFragment : Fragment() {
 
     private lateinit var tvShowAdapter: TvShowAdapter
     private var tvShowViewModel: TvShowViewModel? = null
-    private var tvShows: ArrayList<TvShowEntity>? = null
 
     companion object {
         const val EXTRA_TV_SHOW_ID = "EXTRA_TV_SHOW_ID"
@@ -43,11 +43,8 @@ class TvShowFragment : androidx.fragment.app.Fragment() {
 
         tvShowViewModel = obtainViewModel(activity)
 
-        if (tvShowViewModel?.countRetrievedTvShows() == null) {
-            tvShowViewModel?.setTvShows()
-            showLoading(true)
-        }
-        tvShowViewModel?.tvShows?.observe(this, getTvShows)
+        tvShowViewModel?.setUsername("The Movie DB")
+        getTvShows()
 
         tvShowRV.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         tvShowRV.setHasFixedSize(true)
@@ -55,31 +52,39 @@ class TvShowFragment : androidx.fragment.app.Fragment() {
 
         refreshLayout.setOnRefreshLoadMoreListener(object : OnRefreshLoadMoreListener {
             override fun onLoadMore(refreshLayout: RefreshLayout) {
-                tvShowViewModel?.setTvShows()
+                refreshLayout.finishLoadMore()
             }
 
             override fun onRefresh(refreshLayout: RefreshLayout) {
-                tvShowViewModel?.setTvShows()
+                getTvShows()
             }
         })
     }
 
-    private val getTvShows = Observer<ArrayList<TvShowEntity>> {
-        tvShows = it
-        showLoading(false)
-        refreshLayout.finishRefresh(true)
-        refreshLayout.finishLoadMore(true)
-        if (it != null) {
-            tvShowAdapter.setTvShows(it)
-            onFailLL.visibility = View.GONE
-        } else {
-            onFailLL.visibility = View.VISIBLE
-            Toast.makeText(
-                context,
-                resources.getString(R.string.check_your_connection),
-                Toast.LENGTH_LONG
-            ).show()
-        }
+    private fun getTvShows() {
+        tvShowViewModel?.tvShows?.observe(this, Observer {
+            if (it != null) {
+                when (it.status) {
+                    Status.LOADING -> progressBar.visibility = View.VISIBLE
+                    Status.SUCCESS -> {
+                        progressBar.visibility = View.GONE
+                        tvShowAdapter.setTvShows(it.data)
+                        tvShowAdapter.notifyDataSetChanged()
+                        refreshLayout.finishRefresh()
+                    }
+                    Status.ERROR -> {
+                        progressBar.visibility = View.GONE
+                        onFailLL.visibility = View.VISIBLE
+                        Toast.makeText(
+                            context,
+                            resources.getString(R.string.check_your_connection),
+                            Toast.LENGTH_LONG
+                        ).show()
+                        refreshLayout.finishRefresh()
+                    }
+                }
+            }
+        })
     }
 
     private fun obtainViewModel(activity: FragmentActivity?): TvShowViewModel? {
@@ -88,14 +93,4 @@ class TvShowFragment : androidx.fragment.app.Fragment() {
             ViewModelProviders.of(it, factory).get(TvShowViewModel::class.java)
         }
     }
-
-
-    private fun showLoading(state: Boolean) {
-        if (state) {
-            progressBar.visibility = View.VISIBLE
-        } else {
-            progressBar.visibility = View.GONE
-        }
-    }
-
 }

@@ -43,10 +43,8 @@ class MovieFragment : Fragment() {
 
         movieViewModel = obtainViewModel(activity)
 
-        if (movieViewModel?.countRetrievedMovies() == null) {
-            movieViewModel?.setUsername("The Movie DB")
-            getMovies()
-        }
+        movieViewModel?.setUsername("The Movie DB")
+        getMovies()
 
         movieRV.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         movieRV.setHasFixedSize(true)
