@@ -3,16 +3,16 @@ package andi.gdk.jetpackpro.ui.home.movie
 import andi.gdk.jetpackpro.data.source.TheMovieDbRepository
 import andi.gdk.jetpackpro.data.source.local.entity.MovieEntity
 import andi.gdk.jetpackpro.utils.generateDummyMovies
+import andi.gdk.jetpackpro.vo.Resource
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import junit.framework.TestCase.assertEquals
-import junit.framework.TestCase.assertNotNull
+import com.nhaarman.mockitokotlin2.verify
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mockito.*
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.mock
 
 class MovieViewModelTest {
 
@@ -21,6 +21,7 @@ class MovieViewModelTest {
 
     private lateinit var viewModel: MovieViewModel
     private val theMovieDbRepository = mock(TheMovieDbRepository::class.java)
+    private val username = "The Movie DB"
 
     @Before
     fun setUp() {
@@ -29,23 +30,15 @@ class MovieViewModelTest {
 
     @Test
     fun getMovies() {
-        val dummyMovies = generateDummyMovies()
+        val resource = Resource.success(generateDummyMovies()) as Resource<List<MovieEntity>>
+        val dummyMovies = MutableLiveData<Resource<List<MovieEntity>>>()
+        dummyMovies.value = resource
 
-        val movies = MutableLiveData<ArrayList<MovieEntity>>()
-        movies.value = dummyMovies
+        `when`(theMovieDbRepository.getMovies()).thenReturn(dummyMovies)
 
-        `when`<LiveData<ArrayList<MovieEntity>>>(theMovieDbRepository.getMovies(1)).thenReturn(
-            movies
-        )
-
-        val observer = mock(Observer::class.java) as Observer<ArrayList<MovieEntity>>
-
-        viewModel.setPage(1)
-        viewModel.setMovies()
+        val observer = mock(Observer::class.java) as Observer<Resource<List<MovieEntity>>>
+        viewModel.setUsername(username)
         viewModel.movies.observeForever(observer)
-
-        verify(observer).onChanged(dummyMovies)
-        assertNotNull(viewModel.movies)
-        assertEquals(movies.value?.size, viewModel.countRetrievedMovies())
+        verify(observer).onChanged(resource)
     }
 }

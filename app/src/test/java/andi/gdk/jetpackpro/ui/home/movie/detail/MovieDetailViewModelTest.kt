@@ -1,15 +1,13 @@
 package andi.gdk.jetpackpro.ui.home.movie.detail
 
 import andi.gdk.jetpackpro.data.source.TheMovieDbRepository
-import andi.gdk.jetpackpro.response.MovieResponse
+import andi.gdk.jetpackpro.data.source.local.entity.MovieDetailEntity
 import andi.gdk.jetpackpro.utils.generateDummyMovie
 import andi.gdk.jetpackpro.utils.generateDummyMovies
+import andi.gdk.jetpackpro.vo.Resource
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import junit.framework.TestCase.assertEquals
-import junit.framework.TestCase.assertNotNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -25,7 +23,6 @@ class MovieDetailViewModelTest {
     private val theMovieDbRepository = mock(TheMovieDbRepository::class.java)
     private val dummyMovie = generateDummyMovies()[0]
     private val movieId = dummyMovie.id
-    private val dummyMovieResponse = generateDummyMovie()
 
     @Before
     fun setUp() {
@@ -35,20 +32,14 @@ class MovieDetailViewModelTest {
 
     @Test
     fun getMovie() {
+        val resource = Resource.success(generateDummyMovie())
+        val movieDetailEntity = MutableLiveData<Resource<MovieDetailEntity>>()
+        movieDetailEntity.value = resource
 
-        val movie = MutableLiveData<MovieResponse>()
-        movie.value = dummyMovieResponse
+        `when`(theMovieDbRepository.getMovie(movieId)).thenReturn(movieDetailEntity)
 
-        `when`<LiveData<MovieResponse>>(movieId?.let { theMovieDbRepository.getMovie(it) })
-            .thenReturn(movie)
-
-        val observer = mock(Observer::class.java) as Observer<MovieResponse>
-
-        viewModel.setMovie()
+        val observer = mock(Observer::class.java) as Observer<Resource<MovieDetailEntity>>
         viewModel.movie.observeForever(observer)
-
-        verify(observer).onChanged(dummyMovieResponse)
-        assertNotNull(viewModel.movie)
-        assertEquals(movie.value, dummyMovieResponse)
+        verify(observer).onChanged(resource)
     }
 }

@@ -4,11 +4,10 @@ import andi.gdk.jetpackpro.data.source.TheMovieDbRepository
 import andi.gdk.jetpackpro.data.source.local.entity.TvShowDetailEntity
 import andi.gdk.jetpackpro.utils.generateDummyTvShow
 import andi.gdk.jetpackpro.utils.generateDummyTvShows
+import andi.gdk.jetpackpro.vo.Resource
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import junit.framework.TestCase
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -25,7 +24,6 @@ class TvShowDetailViewModelTest {
     private val theMovieDbRepository = Mockito.mock(TheMovieDbRepository::class.java)
     private var dummyTvShow = generateDummyTvShows()[0]
     private val tvShowId = dummyTvShow.id
-    private val dummyTvShowResponse = generateDummyTvShow()
 
     @Before
     fun setUp() {
@@ -35,19 +33,14 @@ class TvShowDetailViewModelTest {
 
     @Test
     fun getTvShow() {
-        val tvShow = MutableLiveData<TvShowDetailEntity>()
-        tvShow.value = dummyTvShowResponse
+        val resource = Resource.success(generateDummyTvShow())
+        val tvShowDetailEntity = MutableLiveData<Resource<TvShowDetailEntity>>()
+        tvShowDetailEntity.value = resource
 
-        `when`<LiveData<TvShowDetailEntity>>(tvShowId?.let { theMovieDbRepository.getTvShow(it) })
-            .thenReturn(tvShow)
+        `when`(tvShowId?.let { theMovieDbRepository.getTvShow(it) }).thenReturn(tvShowDetailEntity)
 
-        val observer = Mockito.mock(Observer::class.java) as Observer<TvShowDetailEntity>
-
-        viewModel.setTvShow()
+        val observer = Mockito.mock(Observer::class.java) as Observer<Resource<TvShowDetailEntity>>
         viewModel.tvShow.observeForever(observer)
-
-        Mockito.verify(observer).onChanged(dummyTvShowResponse)
-        TestCase.assertNotNull(viewModel.tvShow)
-        TestCase.assertEquals(tvShow.value, dummyTvShowResponse)
+        Mockito.verify(observer).onChanged(resource)
     }
 }
