@@ -1,76 +1,182 @@
 package andi.gdk.jetpackpro.data.source
 
+import andi.gdk.jetpackpro.data.source.local.LocalRepository
+import andi.gdk.jetpackpro.data.source.local.entity.MovieDetailEntity
 import andi.gdk.jetpackpro.data.source.local.entity.MovieEntity
 import andi.gdk.jetpackpro.data.source.local.entity.TvShowDetailEntity
 import andi.gdk.jetpackpro.data.source.local.entity.TvShowEntity
+import andi.gdk.jetpackpro.data.source.remote.ApiResponse
 import andi.gdk.jetpackpro.data.source.remote.RemoteRepository
-import andi.gdk.jetpackpro.response.MovieResponse
+import andi.gdk.jetpackpro.utils.AppExecutors
+import andi.gdk.jetpackpro.vo.Resource
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.paging.DataSource
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
 
-class FakeTheMovieDbRepository(private val remoteRepository: RemoteRepository) :
+open class FakeTheMovieDbRepository(
+    private val localRepository: LocalRepository,
+    private val remoteRepository: RemoteRepository,
+    val appExecutors: AppExecutors
+) :
     TheMovieDbDataSource {
 
-    override fun getMovie(id: Int?): LiveData<MovieResponse> {
-        val movie = MutableLiveData<MovieResponse>()
+    override fun getMovies(): LiveData<Resource<List<MovieEntity>>> {
 
-        remoteRepository.getMovie(object : RemoteRepository.LoadMovieCallback {
-            override fun onMovieRetrieved(movieEntity: MovieResponse?) {
-                movie.postValue(movieEntity)
+        return object : NetworkBoundResource<List<MovieEntity>, List<MovieEntity>>(appExecutors) {
+            override fun loadFromDB(): LiveData<List<MovieEntity>> {
+                return localRepository.movies!!
             }
 
-            override fun onFail() {
+            override fun shouldFetch(data: List<MovieEntity>?): Boolean {
+                return data?.size == 0
             }
-        }, id)
 
-        return movie
+            override fun createCall(): LiveData<ApiResponse<List<MovieEntity>>> {
+                return remoteRepository.getMovies()
+            }
+
+            override fun saveCallResult(data: List<MovieEntity>?) {
+                data?.let { localRepository.insertMovies(it) }
+            }
+
+        }.asLiveData()
+
     }
 
-    override fun getMovies(page: Int): LiveData<ArrayList<MovieEntity>> {
+    override fun getMovie(id: Int): LiveData<Resource<MovieDetailEntity>> {
 
-        val movies = MutableLiveData<ArrayList<MovieEntity>>()
-
-        remoteRepository.getMovies(object : RemoteRepository.LoadMoviesCallback {
-            override fun onMoviesRetrieved(movieEntities: ArrayList<MovieEntity>?) {
-                movies.postValue(movieEntities)
+        return object : NetworkBoundResource<MovieDetailEntity, MovieDetailEntity>(appExecutors) {
+            override fun loadFromDB(): LiveData<MovieDetailEntity> {
+                return localRepository.getMovieDetail(id)!!
             }
 
-            override fun onFail() {
+            override fun shouldFetch(data: MovieDetailEntity?): Boolean {
+                return data == null
             }
-        }, page)
 
-        return movies
+            override fun createCall(): LiveData<ApiResponse<MovieDetailEntity>> {
+                return remoteRepository.getMovie(id)
+            }
+
+            override fun saveCallResult(data: MovieDetailEntity?) {
+                data?.let { localRepository.insertMovieDetail(it) }
+            }
+        }.asLiveData()
     }
 
-    override fun getTvShows(page: Int): LiveData<ArrayList<TvShowEntity>> {
+    override fun getTvShows(): LiveData<Resource<List<TvShowEntity>>> {
 
-        val tvShows = MutableLiveData<ArrayList<TvShowEntity>>()
-
-        remoteRepository.getTvShows(object : RemoteRepository.LoadTvShowsCallback {
-            override fun onTvShowsRetrieved(tvShowsResponse: ArrayList<TvShowEntity>?) {
-                tvShows.postValue(tvShowsResponse)
+        return object : NetworkBoundResource<List<TvShowEntity>, List<TvShowEntity>>(appExecutors) {
+            override fun loadFromDB(): LiveData<List<TvShowEntity>> {
+                return localRepository.tvShows!!
             }
 
-            override fun onFail() {
+            override fun shouldFetch(data: List<TvShowEntity>?): Boolean {
+                return data?.size == 0
             }
-        }, page)
 
-        return tvShows
+            override fun createCall(): LiveData<ApiResponse<List<TvShowEntity>>> {
+                return remoteRepository.getTvShows()
+            }
+
+            override fun saveCallResult(data: List<TvShowEntity>?) {
+                data?.let { localRepository.insertTvShows(it) }
+            }
+
+        }.asLiveData()
+
     }
 
-    override fun getTvShow(id: Int?): LiveData<TvShowDetailEntity> {
-        val tvShow = MutableLiveData<TvShowDetailEntity>()
+    override fun getTvShow(id: Int): LiveData<Resource<TvShowDetailEntity>> {
 
-        remoteRepository.getTvShow(object : RemoteRepository.LoadTvShowCallback {
-            override fun onTvShowRetrieved(tvShowEntity: TvShowDetailEntity?) {
-                tvShow.postValue(tvShowEntity)
+        return object : NetworkBoundResource<TvShowDetailEntity, TvShowDetailEntity>(appExecutors) {
+            override fun loadFromDB(): LiveData<TvShowDetailEntity> {
+                return localRepository.getTvShowDetail(id)!!
             }
 
-            override fun onFail() {
+            override fun shouldFetch(data: TvShowDetailEntity?): Boolean {
+                return data == null
             }
-        }, id)
 
-        return tvShow
+            override fun createCall(): LiveData<ApiResponse<TvShowDetailEntity>> {
+                return remoteRepository.getTvShow(id)
+            }
+
+            override fun saveCallResult(data: TvShowDetailEntity?) {
+                data?.let { localRepository.insertTvShowDetail(it) }
+            }
+        }.asLiveData()
+
+    }
+
+    override fun getFavoriteMovies(): LiveData<Resource<PagedList<MovieEntity>>> {
+        return object :
+            NetworkBoundResource<PagedList<MovieEntity>, List<MovieEntity>>(appExecutors) {
+            override fun loadFromDB(): LiveData<PagedList<MovieEntity>> {
+                return LivePagedListBuilder(
+                    localRepository.getFavoriteMovies() as DataSource.Factory<Int, MovieEntity>,
+                    20
+                ).build()
+            }
+
+            override fun shouldFetch(data: PagedList<MovieEntity>?): Boolean {
+                return false
+            }
+
+            override fun createCall(): LiveData<ApiResponse<List<MovieEntity>>>? {
+                return null
+            }
+
+            override fun saveCallResult(data: List<MovieEntity>?) {
+
+            }
+
+        }.asLiveData()
+    }
+
+    override fun getFavoriteTvShows(): LiveData<Resource<PagedList<TvShowEntity>>> {
+        return object :
+            NetworkBoundResource<PagedList<TvShowEntity>, List<TvShowEntity>>(appExecutors) {
+            override fun loadFromDB(): LiveData<PagedList<TvShowEntity>> {
+                return LivePagedListBuilder(
+                    localRepository.getFavoriteTvShows() as DataSource.Factory<Int, TvShowEntity>,
+                    10
+                ).build()
+            }
+
+            override fun shouldFetch(data: PagedList<TvShowEntity>?): Boolean {
+                return false
+            }
+
+            override fun createCall(): LiveData<ApiResponse<List<TvShowEntity>>>? {
+                return null
+            }
+
+            override fun saveCallResult(data: List<TvShowEntity>?) {
+            }
+
+        }.asLiveData()
+    }
+
+    override fun setFavoriteMovie(movieEntity: MovieEntity) {
+        val runnable = Runnable { localRepository.setFavoriteMovie(movieEntity) }
+        appExecutors.diskIO().execute(runnable)
+    }
+
+    override fun setFavoriteMovieDetail(movieDetailEntity: MovieDetailEntity) {
+        val runnable = Runnable { localRepository.setFavoriteMovieDetail(movieDetailEntity) }
+        appExecutors.diskIO().execute(runnable)
+    }
+
+    override fun setFavoriteTvShow(tvShowEntity: TvShowEntity) {
+        val runnable = Runnable { localRepository.setFavoriteTvShow(tvShowEntity) }
+        appExecutors.diskIO().execute(runnable)
+    }
+
+    override fun setFavoriteTvShowDetail(tvShowDetailEntity: TvShowDetailEntity) {
+        val runnable = Runnable { localRepository.setFavoriteTvShowDetail(tvShowDetailEntity) }
+        appExecutors.diskIO().execute(runnable)
     }
 
 }
