@@ -2,14 +2,17 @@ package andi.gdk.jetpackpro.data.source.remote
 
 import andi.gdk.jetpackpro.BuildConfig
 import andi.gdk.jetpackpro.api.ApiConfig
+import andi.gdk.jetpackpro.data.source.local.entity.MovieDetailEntity
 import andi.gdk.jetpackpro.data.source.local.entity.MovieEntity
+import andi.gdk.jetpackpro.data.source.local.entity.TvShowDetailEntity
 import andi.gdk.jetpackpro.data.source.local.entity.TvShowEntity
 import andi.gdk.jetpackpro.data.source.remote.response.MoviesResponse
-import andi.gdk.jetpackpro.data.source.remote.response.TvShowResponse
 import andi.gdk.jetpackpro.data.source.remote.response.TvShowsResponse
 import andi.gdk.jetpackpro.response.MovieResponse
 import andi.gdk.jetpackpro.utils.EspressoIdlingResource
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import retrofit2.Call
 import retrofit2.Response
 
@@ -26,10 +29,13 @@ open class RemoteRepository {
         }
     }
 
-    fun getMovies(loadMoviesCallback: LoadMoviesCallback?, page: Int) {
+    fun getMovies(): LiveData<ApiResponse<List<MovieEntity>>> {
+
         EspressoIdlingResource.increment()
+        val movies: MutableLiveData<ApiResponse<List<MovieEntity>>> = MutableLiveData()
+
         ApiConfig().instance().getMovies(
-            BuildConfig.TOKEN, page
+            BuildConfig.TOKEN
         ).enqueue(object : retrofit2.Callback<MoviesResponse> {
             override fun onFailure(call: Call<MoviesResponse>, t: Throwable) {
                 Log.d("M Fail", t.message.toString())
@@ -39,19 +45,20 @@ open class RemoteRepository {
                 call: Call<MoviesResponse>,
                 response: Response<MoviesResponse>
             ) {
-                loadMoviesCallback?.onMoviesRetrieved(response.body()?.movies)
-                EspressoIdlingResource.decrement()
+                movies.value = ApiResponse.success(response.body()?.movies)
+                if (!EspressoIdlingResource.espressoIdlingResource.isIdleNow) {
+                    EspressoIdlingResource.decrement()
+                }
             }
         })
+        return movies
     }
 
-    interface LoadMoviesCallback {
-        fun onMoviesRetrieved(movieEntities: ArrayList<MovieEntity>?)
-        fun onFail()
-    }
+    fun getMovie(id: Int?): LiveData<ApiResponse<MovieDetailEntity>> {
 
-    fun getMovie(loadMoviesCallback: LoadMovieCallback?, id: Int?) {
         EspressoIdlingResource.increment()
+        val movie: MutableLiveData<ApiResponse<MovieDetailEntity>> = MutableLiveData()
+
         ApiConfig().instance().getMovie(id, BuildConfig.TOKEN)
             .enqueue(object : retrofit2.Callback<MovieResponse> {
                 override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
@@ -62,21 +69,30 @@ open class RemoteRepository {
                     call: Call<MovieResponse>,
                     response: Response<MovieResponse>
                 ) {
-                    EspressoIdlingResource.decrement()
-                    loadMoviesCallback?.onMovieRetrieved(response.body())
+                    movie.value = ApiResponse.success(
+                        MovieDetailEntity(
+                            id,
+                            response.body()?.budget,
+                            response.body()?.revenue,
+                            response.body()?.runtime
+                        )
+                    )
+                    if (!EspressoIdlingResource.espressoIdlingResource.isIdleNow) {
+                        EspressoIdlingResource.decrement()
+                    }
                 }
             })
+
+        return movie
     }
 
-    interface LoadMovieCallback {
-        fun onMovieRetrieved(movieEntity: MovieResponse?)
-        fun onFail()
-    }
+    fun getTvShows(): LiveData<ApiResponse<List<TvShowEntity>>> {
 
-    fun getTvShows(loadTvShowsCallback: LoadTvShowsCallback?, page: Int) {
         EspressoIdlingResource.increment()
+        val tvShows: MutableLiveData<ApiResponse<List<TvShowEntity>>> = MutableLiveData()
+
         ApiConfig().instance().getTvShows(
-            BuildConfig.TOKEN, page
+            BuildConfig.TOKEN
         ).enqueue(object : retrofit2.Callback<TvShowsResponse> {
             override fun onFailure(call: Call<TvShowsResponse>, t: Throwable) {
                 Log.d("M Fail", t.message.toString())
@@ -86,38 +102,38 @@ open class RemoteRepository {
                 call: Call<TvShowsResponse>,
                 response: Response<TvShowsResponse>
             ) {
-                EspressoIdlingResource.decrement()
-                loadTvShowsCallback?.onTvShowsRetrieved(response.body()?.tvShows)
+                tvShows.value = ApiResponse.success(response.body()?.tvShows)
+                if (!EspressoIdlingResource.espressoIdlingResource.isIdleNow) {
+                    EspressoIdlingResource.decrement()
+                }
             }
         })
+
+        return tvShows
     }
 
-    interface LoadTvShowsCallback {
-        fun onTvShowsRetrieved(tvShowsResponse: ArrayList<TvShowEntity>?)
-        fun onFail()
-    }
+    fun getTvShow(id: Int?): LiveData<ApiResponse<TvShowDetailEntity>> {
 
-    fun getTvShow(loadTvShowCallback: LoadTvShowCallback?, id: Int?) {
         EspressoIdlingResource.increment()
+        val tvShow: MutableLiveData<ApiResponse<TvShowDetailEntity>> = MutableLiveData()
+
         ApiConfig().instance().getTvShow(id, BuildConfig.TOKEN)
-            .enqueue(object : retrofit2.Callback<TvShowResponse> {
-                override fun onFailure(call: Call<TvShowResponse>, t: Throwable) {
+            .enqueue(object : retrofit2.Callback<TvShowDetailEntity> {
+                override fun onFailure(call: Call<TvShowDetailEntity>, t: Throwable) {
                     Log.d("M Fail", t.message.toString())
                 }
 
                 override fun onResponse(
-                    call: Call<TvShowResponse>,
-                    response: Response<TvShowResponse>
+                    call: Call<TvShowDetailEntity>,
+                    response: Response<TvShowDetailEntity>
                 ) {
-                    EspressoIdlingResource.decrement()
-                    loadTvShowCallback?.onTvShowRetrieved(response.body())
+                    tvShow.value = ApiResponse.success(response.body())
+                    if (!EspressoIdlingResource.espressoIdlingResource.isIdleNow) {
+                        EspressoIdlingResource.decrement()
+                    }
                 }
             })
-    }
-
-    interface LoadTvShowCallback {
-        fun onTvShowRetrieved(tvShowEntity: TvShowResponse?)
-        fun onFail()
+        return tvShow
     }
 
 }

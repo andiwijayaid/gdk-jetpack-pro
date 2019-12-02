@@ -6,6 +6,7 @@ import andi.gdk.jetpackpro.ui.home.movie.MovieViewModel
 import andi.gdk.jetpackpro.ui.home.movie.detail.MovieDetailViewModel
 import andi.gdk.jetpackpro.ui.home.tvshow.TvShowViewModel
 import andi.gdk.jetpackpro.ui.home.tvshow.detail.TvShowDetailViewModel
+import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
@@ -35,11 +36,15 @@ class ViewModelFactory private constructor(private val theMovieDbRepository: The
         @Volatile
         private var INSTANCE: ViewModelFactory? = null
 
-        fun getInstance(): ViewModelFactory? {
+        fun getInstance(application: Application): ViewModelFactory? {
             if (INSTANCE == null) {
                 synchronized(ViewModelFactory::class.java) {
                     if (INSTANCE == null) {
-                        INSTANCE = Injection.provideRepository()?.let { ViewModelFactory(it) }
+                        INSTANCE = Injection.provideRepository(application)?.let {
+                            ViewModelFactory(
+                                it
+                            )
+                        }
                     }
                 }
             }

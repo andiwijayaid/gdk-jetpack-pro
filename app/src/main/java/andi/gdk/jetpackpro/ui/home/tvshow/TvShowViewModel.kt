@@ -7,16 +7,10 @@ import androidx.lifecycle.ViewModel
 
 class TvShowViewModel(private val theMovieDbRepository: TheMovieDbRepository) : ViewModel() {
 
-    private var page = 0
     var tvShows = MutableLiveData<ArrayList<TvShowEntity>>()
 
-    fun setPage(page: Int) {
-        this.page = page
-    }
-
-
     fun setTvShows() {
-        tvShows = theMovieDbRepository.getTvShows(page)
+//        tvShows = theMovieDbRepository.getTvShows(page)
     }
 
     fun countRetrievedTvShows(): Int? {

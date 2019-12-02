@@ -18,7 +18,7 @@ class MovieDetailViewModel(private val theMovieDbRepository: TheMovieDbRepositor
     }
 
     fun setMovie() {
-        movie = theMovieDbRepository.getMovie(id)
+//        movie = theMovieDbRepository.getMovie(id)
     }
 
 }

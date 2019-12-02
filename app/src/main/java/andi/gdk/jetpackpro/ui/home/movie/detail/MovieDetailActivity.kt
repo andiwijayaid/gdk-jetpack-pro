@@ -119,7 +119,7 @@ class MovieDetailActivity : AppCompatActivity() {
     }
 
     private fun obtainViewModel(activity: FragmentActivity?): MovieDetailViewModel? {
-        val factory = ViewModelFactory.getInstance()
+        val factory = ViewModelFactory.getInstance(application)
         return activity?.let {
             ViewModelProviders.of(it, factory).get(MovieDetailViewModel::class.java)
         }

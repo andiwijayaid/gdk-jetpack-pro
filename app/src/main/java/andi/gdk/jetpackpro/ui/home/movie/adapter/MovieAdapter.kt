@@ -21,15 +21,9 @@ class MovieAdapter(private val context: Context?) :
 
     private val movies = arrayListOf<MovieEntity>()
 
-    fun setMovies(movies: ArrayList<MovieEntity>?) {
+    fun setMovies(movies: List<MovieEntity>?) {
         if (movies == null) return
         this.movies.clear()
-        this.movies.addAll(movies)
-        notifyDataSetChanged()
-    }
-
-    fun addMovies(movies: ArrayList<MovieEntity>?) {
-        if (movies == null) return
         this.movies.addAll(movies)
         notifyDataSetChanged()
     }

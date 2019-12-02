@@ -1,7 +1,7 @@
 package andi.gdk.jetpackpro.ui.home.tvshow.detail
 
 import andi.gdk.jetpackpro.data.source.TheMovieDbRepository
-import andi.gdk.jetpackpro.data.source.remote.response.TvShowResponse
+import andi.gdk.jetpackpro.data.source.local.entity.TvShowDetailEntity
 import andi.gdk.jetpackpro.utils.generateDummyTvShow
 import andi.gdk.jetpackpro.utils.generateDummyTvShows
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
@@ -35,13 +35,13 @@ class TvShowDetailViewModelTest {
 
     @Test
     fun getTvShow() {
-        val tvShow = MutableLiveData<TvShowResponse>()
+        val tvShow = MutableLiveData<TvShowDetailEntity>()
         tvShow.value = dummyTvShowResponse
 
-        `when`<LiveData<TvShowResponse>>(tvShowId?.let { theMovieDbRepository.getTvShow(it) })
+        `when`<LiveData<TvShowDetailEntity>>(tvShowId?.let { theMovieDbRepository.getTvShow(it) })
             .thenReturn(tvShow)
 
-        val observer = Mockito.mock(Observer::class.java) as Observer<TvShowResponse>
+        val observer = Mockito.mock(Observer::class.java) as Observer<TvShowDetailEntity>
 
         viewModel.setTvShow()
         viewModel.tvShow.observeForever(observer)

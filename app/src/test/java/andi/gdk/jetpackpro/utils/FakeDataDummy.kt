@@ -1,8 +1,8 @@
 package andi.gdk.jetpackpro.utils
 
 import andi.gdk.jetpackpro.data.source.local.entity.MovieEntity
+import andi.gdk.jetpackpro.data.source.local.entity.TvShowDetailEntity
 import andi.gdk.jetpackpro.data.source.local.entity.TvShowEntity
-import andi.gdk.jetpackpro.data.source.remote.response.TvShowResponse
 import andi.gdk.jetpackpro.response.MovieResponse
 
 fun generateDummyMovies(): ArrayList<MovieEntity> {
@@ -487,7 +487,7 @@ fun generateDummyTvShows(): ArrayList<TvShowEntity> {
     return tvShows
 }
 
-fun generateDummyTvShow() = TvShowResponse(
+fun generateDummyTvShow() = TvShowDetailEntity(
     36,
     4
 )

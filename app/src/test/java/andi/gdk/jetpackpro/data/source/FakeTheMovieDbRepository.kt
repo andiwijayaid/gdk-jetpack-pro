@@ -1,9 +1,9 @@
 package andi.gdk.jetpackpro.data.source
 
 import andi.gdk.jetpackpro.data.source.local.entity.MovieEntity
+import andi.gdk.jetpackpro.data.source.local.entity.TvShowDetailEntity
 import andi.gdk.jetpackpro.data.source.local.entity.TvShowEntity
 import andi.gdk.jetpackpro.data.source.remote.RemoteRepository
-import andi.gdk.jetpackpro.data.source.remote.response.TvShowResponse
 import andi.gdk.jetpackpro.response.MovieResponse
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -58,11 +58,11 @@ class FakeTheMovieDbRepository(private val remoteRepository: RemoteRepository) :
         return tvShows
     }
 
-    override fun getTvShow(id: Int?): LiveData<TvShowResponse> {
-        val tvShow = MutableLiveData<TvShowResponse>()
+    override fun getTvShow(id: Int?): LiveData<TvShowDetailEntity> {
+        val tvShow = MutableLiveData<TvShowDetailEntity>()
 
         remoteRepository.getTvShow(object : RemoteRepository.LoadTvShowCallback {
-            override fun onTvShowRetrieved(tvShowEntity: TvShowResponse?) {
+            override fun onTvShowRetrieved(tvShowEntity: TvShowDetailEntity?) {
                 tvShow.postValue(tvShowEntity)
             }
 

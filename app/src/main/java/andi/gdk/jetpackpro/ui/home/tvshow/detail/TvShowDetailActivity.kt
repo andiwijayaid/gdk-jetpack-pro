@@ -2,8 +2,8 @@ package andi.gdk.jetpackpro.ui.home.tvshow.detail
 
 import andi.gdk.jetpackpro.BuildConfig
 import andi.gdk.jetpackpro.R
+import andi.gdk.jetpackpro.data.source.local.entity.TvShowDetailEntity
 import andi.gdk.jetpackpro.data.source.local.entity.TvShowEntity
-import andi.gdk.jetpackpro.data.source.remote.response.TvShowResponse
 import andi.gdk.jetpackpro.ui.home.tvshow.TvShowFragment.Companion.EXTRA_TV_SHOW
 import andi.gdk.jetpackpro.ui.home.tvshow.TvShowFragment.Companion.EXTRA_TV_SHOW_ID
 import andi.gdk.jetpackpro.utils.normalizeRating
@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.main.activity_tv_show_detail.*
 class TvShowDetailActivity : AppCompatActivity() {
 
     private var tvShowDetailViewModel: TvShowDetailViewModel? = null
-    private lateinit var tvShow: TvShowResponse
+    private lateinit var tvShow: TvShowDetailEntity
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,7 +76,7 @@ class TvShowDetailActivity : AppCompatActivity() {
         tvShowDetailViewModel?.tvShow?.observe(this, getTvShow)
     }
 
-    private val getTvShow = Observer<TvShowResponse> {
+    private val getTvShow = Observer<TvShowDetailEntity> {
         tvShow = it
         if (it != null) {
             stopLoading()
@@ -101,7 +101,7 @@ class TvShowDetailActivity : AppCompatActivity() {
     }
 
     private fun obtainViewModel(activity: FragmentActivity?): TvShowDetailViewModel? {
-        val factory = ViewModelFactory.getInstance()
+        val factory = ViewModelFactory.getInstance(application)
         return activity?.let {
             ViewModelProviders.of(it, factory).get(TvShowDetailViewModel::class.java)
         }

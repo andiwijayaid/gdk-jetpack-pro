@@ -22,7 +22,6 @@ class TvShowFragment : androidx.fragment.app.Fragment() {
     private lateinit var tvShowAdapter: TvShowAdapter
     private var tvShowViewModel: TvShowViewModel? = null
     private var tvShows: ArrayList<TvShowEntity>? = null
-    private var page = 1
 
     companion object {
         const val EXTRA_TV_SHOW_ID = "EXTRA_TV_SHOW_ID"
@@ -45,7 +44,6 @@ class TvShowFragment : androidx.fragment.app.Fragment() {
         tvShowViewModel = obtainViewModel(activity)
 
         if (tvShowViewModel?.countRetrievedTvShows() == null) {
-            tvShowViewModel?.setPage(page)
             tvShowViewModel?.setTvShows()
             showLoading(true)
         }
@@ -57,14 +55,10 @@ class TvShowFragment : androidx.fragment.app.Fragment() {
 
         refreshLayout.setOnRefreshLoadMoreListener(object : OnRefreshLoadMoreListener {
             override fun onLoadMore(refreshLayout: RefreshLayout) {
-                page += 1
-                tvShowViewModel?.setPage(page)
                 tvShowViewModel?.setTvShows()
             }
 
             override fun onRefresh(refreshLayout: RefreshLayout) {
-                page = 1
-                tvShowViewModel?.setPage(page)
                 tvShowViewModel?.setTvShows()
             }
         })
@@ -76,11 +70,7 @@ class TvShowFragment : androidx.fragment.app.Fragment() {
         refreshLayout.finishRefresh(true)
         refreshLayout.finishLoadMore(true)
         if (it != null) {
-            if (page == 1) {
-                tvShowAdapter.setTvShows(it)
-            } else {
-                tvShowAdapter.addTvShows(it)
-            }
+            tvShowAdapter.setTvShows(it)
             onFailLL.visibility = View.GONE
         } else {
             onFailLL.visibility = View.VISIBLE
@@ -93,7 +83,7 @@ class TvShowFragment : androidx.fragment.app.Fragment() {
     }
 
     private fun obtainViewModel(activity: FragmentActivity?): TvShowViewModel? {
-        val factory = ViewModelFactory.getInstance()
+        val factory = activity?.application?.let { ViewModelFactory.getInstance(it) }
         return activity?.let {
             ViewModelProviders.of(it, factory).get(TvShowViewModel::class.java)
         }

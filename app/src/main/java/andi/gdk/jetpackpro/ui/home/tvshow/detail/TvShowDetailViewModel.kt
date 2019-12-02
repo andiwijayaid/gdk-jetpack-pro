@@ -1,14 +1,14 @@
 package andi.gdk.jetpackpro.ui.home.tvshow.detail
 
 import andi.gdk.jetpackpro.data.source.TheMovieDbRepository
-import andi.gdk.jetpackpro.data.source.remote.response.TvShowResponse
+import andi.gdk.jetpackpro.data.source.local.entity.TvShowDetailEntity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class TvShowDetailViewModel(private val theMovieDbRepository: TheMovieDbRepository) : ViewModel() {
 
     private var id = 0
-    var tvShow = MutableLiveData<TvShowResponse>()
+    var tvShow = MutableLiveData<TvShowDetailEntity>()
 
     fun setId(id: Int?) {
         if (id != null) {
@@ -17,7 +17,7 @@ class TvShowDetailViewModel(private val theMovieDbRepository: TheMovieDbReposito
     }
 
     fun setTvShow() {
-        tvShow = theMovieDbRepository.getTvShow(id)
+//        tvShow = theMovieDbRepository.getTvShow(id)
     }
 
 }
