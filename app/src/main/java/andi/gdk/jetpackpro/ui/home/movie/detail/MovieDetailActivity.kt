@@ -10,6 +10,7 @@ import andi.gdk.jetpackpro.utils.normalizeRating
 import andi.gdk.jetpackpro.viewmodel.ViewModelFactory
 import andi.gdk.jetpackpro.vo.Status
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.view.animation.AnimationUtils
@@ -33,7 +34,15 @@ class MovieDetailActivity : AppCompatActivity() {
         movieDetailViewModel = obtainViewModel(this)
         val extras = intent.extras
         val movieId = extras?.getInt(EXTRA_MOVIE_ID)
-        movieDetailViewModel?.setId(movieId)
+        movie = intent?.getParcelableExtra(EXTRA_MOVIE)
+        if (movieId != null) {
+            Log.d("B", "${movieId}vvvvv")
+            movieDetailViewModel?.setId(movieId)
+        } else {
+            Log.d("A", "${movie?.id}aaaaa")
+            movieDetailViewModel?.setId(movie?.id)
+        }
+        setMovie()
 
         initUi()
     }
@@ -52,7 +61,6 @@ class MovieDetailActivity : AppCompatActivity() {
             finish()
         }
 
-        movie = intent.getParcelableExtra(EXTRA_MOVIE)
         titleTV.text = movie?.originalTitle
         dateTV.text = movie?.releaseDate
         if (movie?.overview != "") {
@@ -75,7 +83,6 @@ class MovieDetailActivity : AppCompatActivity() {
         posterBackgroundIV.animation = AnimationUtils.loadAnimation(this, R.anim.animaton_scale)
 
         checkFavoriteStatus()
-        setMovie()
 
         favoriteBT.setOnClickListener {
             movieDetailViewModel?.setFavorite(movie)
@@ -115,7 +122,6 @@ class MovieDetailActivity : AppCompatActivity() {
             }
         })
     }
-
 
     private fun stopLoading() {
         budgetTV.visibility = View.VISIBLE

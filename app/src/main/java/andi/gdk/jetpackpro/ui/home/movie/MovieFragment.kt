@@ -26,6 +26,7 @@ class MovieFragment : Fragment() {
     companion object {
         const val EXTRA_MOVIE_ID = "EXTRA_MOVIE_ID"
         const val EXTRA_MOVIE = "EXTRA_MOVIE"
+        const val EXTRA_MOVIE_DETAIL = "EXTRA_MOVIE_DETAIL"
     }
 
     override fun onCreateView(

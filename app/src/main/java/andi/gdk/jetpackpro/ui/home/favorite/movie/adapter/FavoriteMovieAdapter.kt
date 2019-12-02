@@ -3,8 +3,13 @@ package andi.gdk.jetpackpro.ui.home.favorite.movie.adapter
 import andi.gdk.jetpackpro.BuildConfig
 import andi.gdk.jetpackpro.R
 import andi.gdk.jetpackpro.data.source.local.entity.MovieEntity
+import andi.gdk.jetpackpro.ui.home.movie.MovieFragment.Companion.EXTRA_MOVIE
+import andi.gdk.jetpackpro.ui.home.movie.MovieFragment.Companion.EXTRA_MOVIE_ID
+import andi.gdk.jetpackpro.ui.home.movie.detail.MovieDetailActivity
 import andi.gdk.jetpackpro.utils.normalizeRating
 import android.content.Context
+import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -58,7 +63,13 @@ class FavoriteMovieAdapter(private val context: Context?) :
                 AnimationUtils.loadAnimation(context, R.anim.animaton_slide_from_left)
             itemView.titleTV.text = movie.originalTitle
             itemView.ratingBar.rating = normalizeRating(movie.voteAverage)
-
+            itemView.setOnClickListener {
+                val intent = Intent(context, MovieDetailActivity::class.java)
+                intent.putExtra(EXTRA_MOVIE, movie)
+                intent.putExtra(EXTRA_MOVIE_ID, movie.id)
+                intent.flags = FLAG_ACTIVITY_NEW_TASK
+                context.startActivity(intent)
+            }
         }
     }
 

@@ -3,8 +3,12 @@ package andi.gdk.jetpackpro.ui.home.favorite.tvshow.adapter
 import andi.gdk.jetpackpro.BuildConfig
 import andi.gdk.jetpackpro.R
 import andi.gdk.jetpackpro.data.source.local.entity.TvShowEntity
+import andi.gdk.jetpackpro.ui.home.tvshow.TvShowFragment.Companion.EXTRA_TV_SHOW
+import andi.gdk.jetpackpro.ui.home.tvshow.TvShowFragment.Companion.EXTRA_TV_SHOW_ID
+import andi.gdk.jetpackpro.ui.home.tvshow.detail.TvShowDetailActivity
 import andi.gdk.jetpackpro.utils.normalizeRating
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,15 +52,20 @@ class FavoriteTvShowAdapter(private val context: Context?) :
 
     class FavoriteTvSeriesViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        fun bindItem(context: Context, tvSeries: TvShowEntity) {
+        fun bindItem(context: Context, tvShow: TvShowEntity) {
             itemView.itemParentCV.animation =
                 AnimationUtils.loadAnimation(context, R.anim.animaton_slide_from_left)
-            itemView.titleTV.text = tvSeries.originalName
+            itemView.titleTV.text = tvShow.originalName
             Glide.with(context)
-                .load("${BuildConfig.IMAGE_URL}t/p/w185${tvSeries.posterPath}")
+                .load("${BuildConfig.IMAGE_URL}t/p/w185${tvShow.posterPath}")
                 .into(itemView.posterIV)
-            itemView.ratingBar.rating = normalizeRating(tvSeries.voteAverage)
+            itemView.ratingBar.rating = normalizeRating(tvShow.voteAverage)
             itemView.setOnClickListener {
+                val intent = Intent(context, TvShowDetailActivity::class.java)
+                intent.putExtra(EXTRA_TV_SHOW, tvShow)
+                intent.putExtra(EXTRA_TV_SHOW_ID, tvShow.id)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                context.startActivity(intent)
             }
         }
     }
