@@ -16,10 +16,6 @@ class TvShowViewModel(private val theMovieDbRepository: TheMovieDbRepository) : 
         mLogin.value = username
     }
 
-    fun countRetrievedTvShows(): Int? {
-        return tvShows.value?.data?.size
-    }
-
     var tvShows: LiveData<Resource<List<TvShowEntity>>> = Transformations.switchMap(mLogin) {
         theMovieDbRepository.getTvShows()
     }

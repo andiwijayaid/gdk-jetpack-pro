@@ -8,14 +8,17 @@ import andi.gdk.jetpackpro.data.source.local.entity.TvShowDetailEntity
 import andi.gdk.jetpackpro.data.source.local.entity.TvShowEntity
 import andi.gdk.jetpackpro.data.source.remote.RemoteRepository
 import andi.gdk.jetpackpro.utils.*
+import andi.gdk.jetpackpro.vo.Resource
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
+import androidx.paging.DataSource
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 
 class TheMovieDbRepositoryTest {
@@ -100,5 +103,33 @@ class TheMovieDbRepositoryTest {
         assertEquals(tvShowResponse.id, result?.data?.id)
         assertEquals(tvShowResponse.numberOfEpisodes, result?.data?.numberOfEpisodes)
         assertEquals(tvShowResponse.numberOfSeasons, result?.data?.numberOfSeasons)
+    }
+
+    @Test
+    fun getFavoriteMovies() {
+
+        val dataSourceFactory =
+            Mockito.mock(DataSource.Factory::class.java) as DataSource.Factory<Int, MovieEntity>
+
+        `when`(local.getFavoriteMovies()).thenReturn(dataSourceFactory)
+        fakeTheMovieDbRepository.getFavoriteMovies()
+        val result = Resource.success(PagedListUtil.mockPagedList(moviesResponse))
+
+        verify(local).getFavoriteMovies()
+        assertNotNull(result?.data)
+    }
+
+    @Test
+    fun getFavoriteTvShows() {
+
+        val dataSourceFactory =
+            Mockito.mock(DataSource.Factory::class.java) as DataSource.Factory<Int, TvShowEntity>
+
+        `when`(local.getFavoriteTvShows()).thenReturn(dataSourceFactory)
+        fakeTheMovieDbRepository.getFavoriteTvShows()
+        val result = Resource.success(PagedListUtil.mockPagedList(tvShowsResponse))
+
+        verify(local).getFavoriteTvShows()
+        assertNotNull(result?.data)
     }
 }

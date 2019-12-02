@@ -16,10 +16,6 @@ class MovieViewModel(private val theMovieDbRepository: TheMovieDbRepository) : V
         mLogin.value = username
     }
 
-    fun countRetrievedMovies(): Int? {
-        return movies.value?.data?.size
-    }
-
     var movies: LiveData<Resource<List<MovieEntity>>> = Transformations.switchMap(mLogin) {
         theMovieDbRepository.getMovies()
     }

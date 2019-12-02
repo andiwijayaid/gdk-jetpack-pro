@@ -38,19 +38,6 @@ class FavoriteFragment : Fragment() {
         return favoriteView
     }
 
-    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
-        super.setUserVisibleHint(isVisibleToUser)
-        if (isVisibleToUser) {
-            if (currentTabPosition == 0) {
-//                favoriteMovieFragment.setData()
-//                favoriteMovieFragment.favoriteMovieAdapter.notifyDataSetChanged()
-            } else {
-//                favoriteTvSeriesFragment.setData()
-//                favoriteTvSeriesFragment.favoriteTvSeriesAdapter.notifyDataSetChanged()
-            }
-        }
-    }
-
     private fun bindWidgetWithEvent() {
         favoriteView.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
 

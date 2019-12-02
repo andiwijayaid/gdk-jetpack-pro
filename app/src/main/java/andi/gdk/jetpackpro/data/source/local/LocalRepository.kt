@@ -11,7 +11,7 @@ import andi.gdk.jetpackpro.data.source.local.room.TvShowDetailDao
 import androidx.lifecycle.LiveData
 import androidx.paging.DataSource
 
-class LocalRepository private constructor(
+open class LocalRepository private constructor(
     private val movieDao: MovieDao?,
     private val tvShowDao: TvShowDao?,
     private val movieDetailDao: MovieDetailDao?,
@@ -35,18 +35,18 @@ class LocalRepository private constructor(
 
     }
 
-    val movies: LiveData<List<MovieEntity>>?
+    open val movies: LiveData<List<MovieEntity>>?
         get() = movieDao?.getMovies()
 
-    fun getFavoriteMovies(): DataSource.Factory<Int, MovieEntity>? {
+    open fun getFavoriteMovies(): DataSource.Factory<Int, MovieEntity>? {
         return movieDao?.getFavoriteMovies()
     }
 
-    fun getFavoriteTvShows(): DataSource.Factory<Int, TvShowEntity>? {
+    open fun getFavoriteTvShows(): DataSource.Factory<Int, TvShowEntity>? {
         return tvShowDao?.getFavotiteTvShows()
     }
 
-    fun getMovieDetail(movieId: Int): LiveData<MovieDetailEntity>? {
+    open fun getMovieDetail(movieId: Int): LiveData<MovieDetailEntity>? {
         return movieDetailDao?.getMovieDetail(movieId)
     }
 
@@ -58,10 +58,10 @@ class LocalRepository private constructor(
         movieDetailDao?.insertMovieDetail(movieDetail)
     }
 
-    val tvShows: LiveData<List<TvShowEntity>>?
+    open val tvShows: LiveData<List<TvShowEntity>>?
         get() = tvShowDao?.getTvShows()
 
-    fun getTvShowDetail(tvShowId: Int): LiveData<TvShowDetailEntity>? {
+    open fun getTvShowDetail(tvShowId: Int): LiveData<TvShowDetailEntity>? {
         return tvShowDetailDao?.getTvShowDetail(tvShowId)
     }
 
