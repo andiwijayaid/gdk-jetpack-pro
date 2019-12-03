@@ -95,8 +95,8 @@ class TvShowDetailActivity : AppCompatActivity() {
                     }
                     Status.SUCCESS -> {
                         stopLoading()
-                        numberOfSeasonTV.text = it.data?.numberOfEpisodes.toString()
-                        numberOfEpsTV.text = it.data?.numberOfSeasons.toString()
+                        numberOfSeasonTV.text = it.data?.numberOfSeasons.toString()
+                        numberOfEpsTV.text = it.data?.numberOfEpisodes.toString()
                     }
                     Status.ERROR -> {
                         stopLoading()

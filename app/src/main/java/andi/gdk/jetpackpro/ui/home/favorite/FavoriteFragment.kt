@@ -39,7 +39,8 @@ class FavoriteFragment : Fragment() {
     }
 
     private fun bindWidgetWithEvent() {
-        favoriteView.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+        favoriteView.favoriteTabLayout.addOnTabSelectedListener(object :
+            TabLayout.OnTabSelectedListener {
 
             override fun onTabReselected(p0: TabLayout.Tab?) {}
 
@@ -70,11 +71,17 @@ class FavoriteFragment : Fragment() {
     }
 
     private fun setupTabLayout() {
-        favoriteView.tabLayout.addTab(
-            favoriteView.tabLayout.newTab().setText(getString(R.string.movie)),
+        favoriteView.tag = getString(R.string.movie)
+        favoriteView.favoriteTabLayout.addTab(
+            favoriteView.favoriteTabLayout.newTab().setText(getString(R.string.movie)),
             true
         )
-        favoriteView.tabLayout.addTab(favoriteView.tabLayout.newTab().setText(getString(R.string.tv_show)))
+        favoriteView.favoriteTabLayout.addTab(
+            favoriteView.favoriteTabLayout.newTab().setText(
+                getString(R.string.tv_show)
+            )
+        )
+        favoriteView.favoriteTabLayout.tag = getString(R.string.tv_show)
     }
 
 }

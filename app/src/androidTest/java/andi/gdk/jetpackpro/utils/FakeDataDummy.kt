@@ -258,6 +258,7 @@ fun generateFakeDummyTvShows(): ArrayList<TvShowEntity> {
 }
 
 fun generateFakeDummyTvShow() = TvShowDetailEntity(
+    60625,
     36,
     4
 )

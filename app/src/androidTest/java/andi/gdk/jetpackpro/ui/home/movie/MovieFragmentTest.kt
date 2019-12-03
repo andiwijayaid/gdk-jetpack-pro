@@ -8,10 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.rule.ActivityTestRule
 import org.junit.After
 import org.junit.Before
@@ -55,5 +55,24 @@ class MovieFragmentTest {
         )
 
         onView(withId(R.id.titleTV)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun doFavoriteMovie() {
+        onView(withId(R.id.movieRV))
+            .check(matches(isDisplayed()))
+        onView(withId(R.id.movieRV)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                0,
+                ViewActions.click()
+            )
+        )
+
+        onView(withId(R.id.favoriteBT)).check(matches(isDisplayed()))
+        onView(withId(R.id.favoriteBT)).perform(click())
+        onView(isRoot()).perform(ViewActions.pressBack())
+        onView(withId(R.id.viewPager)).perform(ViewActions.swipeLeft())
+        onView(withId(R.id.viewPager)).perform(ViewActions.swipeLeft())
+        onView(withId(R.id.favoriteMovieRV)).check(RecyclerViewItemCountAssertion(1))
     }
 }
